@@ -925,7 +925,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1989325644}
         m_TargetAssemblyTypeName: LobbyController, Assembly-CSharp
         m_MethodName: StartGame
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1398,7 +1398,6 @@ MonoBehaviour:
   lobbyNameText: {fileID: 1709690684}
   playerListContainer: {fileID: 1666475649}
   playerListItemPrefab: {fileID: 4824979874810960319, guid: 959598d1e7ec4184ab92a17cd1020d57, type: 3}
-  gameSceneName: Game Scene
 --- !u!4 &1989325645
 Transform:
   m_ObjectHideFlags: 0

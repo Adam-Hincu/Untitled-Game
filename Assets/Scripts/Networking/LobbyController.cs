@@ -16,9 +16,6 @@ public class LobbyController : MonoBehaviour
 	[SerializeField] private GameObject playerListContainer;
 	[SerializeField] private GameObject playerListItemPrefab;
 
-	[Header("Game Settings")]
-	[SerializeField] private string gameSceneName = "GameScene";
-
 	// Local Player Reference
 	private PlayerObjectController _localPlayerController;
 	public PlayerObjectController localPlayerController => _localPlayerController;
@@ -172,11 +169,8 @@ public class LobbyController : MonoBehaviour
 		}
 	}
 
-	public void StartGame()
+	public void StartGame(string SceneName)
 	{
-		if (NetworkServer.active && NetworkManager != null)
-		{
-			NetworkManager.ServerChangeScene(gameSceneName);
-		}
+		localPlayerController.CanStartGame(SceneName);
 	}
 }
