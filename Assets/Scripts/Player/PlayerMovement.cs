@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
 	public LayerMask whatIsGround;
 	public LayerMask whatIsWallrunnable;
 	public LayerMask whatIsCeiling; // New layer mask for ceiling checks
+	public LayerMask whatIsVaultable; // New layer mask for vaultable objects
 
 	[Header("MovementSettings")]
 
@@ -650,10 +651,15 @@ public class PlayerMovement : MonoBehaviour
 			Debug.DrawLine(rayStart, rayStart + Vector3.up * ceilingCheckHeight, Color.red, 0.5f);
 		}
 
-		// Forward check
-		if (Physics.Raycast(rayStart, moveDirection, vaultCheckDistance, whatIsGround))
+		// Forward check - Only check for vaultable objects
+		RaycastHit forwardHit;
+		if (Physics.Raycast(rayStart, moveDirection, out forwardHit, vaultCheckDistance, whatIsGround))
 		{
-			return;
+			// Check if the hit object is vaultable
+			if ((whatIsVaultable.value & (1 << forwardHit.collider.gameObject.layer)) == 0)
+			{
+				return; // Not a vaultable object
+			}
 		}
 
 		// Ground check
