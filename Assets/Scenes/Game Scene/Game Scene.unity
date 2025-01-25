@@ -3932,7 +3932,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   footSteps:
-  - {fileID: 8300000, guid: 9ebf82b2ad89fd84c9e7e44f3426a6a8, type: 3}
+  - {fileID: 8300000, guid: 4f60de44284dece4885babc00f0e8eaa, type: 3}
+  - {fileID: 8300000, guid: 66716c128034a8f4da930902342393dd, type: 3}
+  - {fileID: 8300000, guid: fcb8ceebb6e4af744ad92e51f0c4821b, type: 3}
+  - {fileID: 8300000, guid: 7626986d1be8e004ea01b0f39e675dcd, type: 3}
   wallSteps:
   - {fileID: 8300000, guid: 9ebf82b2ad89fd84c9e7e44f3426a6a8, type: 3}
   volume: 0.35
