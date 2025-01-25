@@ -156,7 +156,6 @@ namespace Mirror.FizzySteam
                 {
                     if (UseNextGenSteamNetworking)
                     {
-                        Debug.Log($"Starting server [SteamSockets].");
                         server = NextServer.CreateServer(this, NetworkManager.singleton.maxConnections);
                     }
                     else
@@ -229,14 +228,12 @@ namespace Mirror.FizzySteam
             {
                 client.Disconnect();
                 client = null;
-                Debug.Log("Transport shut down - client.");
             }
 
             if (server != null)
             {
                 server.Shutdown();
                 server = null;
-                Debug.Log("Transport shut down - server.");
             }
         }
 

@@ -154,8 +154,6 @@ namespace Mirror
 #endif
                     }
                 }
-                else
-                    Debug.Log("Server started listening");
             }
 
             active = true;
