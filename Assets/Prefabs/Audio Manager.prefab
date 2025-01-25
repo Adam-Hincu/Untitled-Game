@@ -1,0 +1,121 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4969035505203615422
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2825119564416841987}
+  - component: {fileID: 9040082219180062999}
+  - component: {fileID: 5152690163236649973}
+  m_Layer: 0
+  m_Name: Audio Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2825119564416841987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4969035505203615422}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 24.35707, y: -2.70147, z: 3.1613235}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9040082219180062999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4969035505203615422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 913ec326615470f499d20a4644e98f93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footSteps:
+  - {fileID: 8300000, guid: 4f60de44284dece4885babc00f0e8eaa, type: 3}
+  - {fileID: 8300000, guid: 66716c128034a8f4da930902342393dd, type: 3}
+  - {fileID: 8300000, guid: fcb8ceebb6e4af744ad92e51f0c4821b, type: 3}
+  - {fileID: 8300000, guid: 7626986d1be8e004ea01b0f39e675dcd, type: 3}
+  wallSteps:
+  - {fileID: 8300000, guid: 03fe3d8f6644d9e40aff7655dc25abbb, type: 3}
+  - {fileID: 8300000, guid: bbc164536d853dd4b8b929fc10d06713, type: 3}
+  - {fileID: 8300000, guid: 4b9ad48f2276c0a429cc11305f5f8c73, type: 3}
+  - {fileID: 8300000, guid: 61d280f8f6ba7ab42b7bacb48eba4657, type: 3}
+  - {fileID: 8300000, guid: 3c3938a7f97e3694ebc6d4087dcab06a, type: 3}
+  - {fileID: 8300000, guid: 5d5d0049d291bb445bcdbfb509dbecf9, type: 3}
+  volume: 0.35
+--- !u!114 &5152690163236649973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4969035505203615422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 704fdfccd76045a43b9afbeeaf20ce10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: fooley
+    clip: {fileID: 8300000, guid: 9ebf82b2ad89fd84c9e7e44f3426a6a8, type: 3}
+    volume: 0.8
+    pitch: 1
+    isLooping: 1
+    source: {fileID: 0}
+  - name: slide
+    clip: {fileID: 8300000, guid: 9ebf82b2ad89fd84c9e7e44f3426a6a8, type: 3}
+    volume: 0.2
+    pitch: 1
+    isLooping: 0
+    source: {fileID: 0}
+  - name: start slide
+    clip: {fileID: 8300000, guid: 9ebf82b2ad89fd84c9e7e44f3426a6a8, type: 3}
+    volume: 0.2
+    pitch: 1
+    isLooping: 0
+    source: {fileID: 0}
+  - name: jump
+    clip: {fileID: 8300000, guid: 9ebf82b2ad89fd84c9e7e44f3426a6a8, type: 3}
+    volume: 1
+    pitch: 1
+    isLooping: 0
+    source: {fileID: 0}
+  - name: land
+    clip: {fileID: 8300000, guid: 9ebf82b2ad89fd84c9e7e44f3426a6a8, type: 3}
+    volume: 0.4
+    pitch: 1
+    isLooping: 0
+    source: {fileID: 0}
+  - name: pistol shoot
+    clip: {fileID: 8300000, guid: a0bbb3aea273f804aa28bcd4667837a6, type: 3}
+    volume: 0.4
+    pitch: 1
+    isLooping: 0
+    source: {fileID: 0}
+  - name: empty mag
+    clip: {fileID: 8300000, guid: 188822936494d8242b1c8d84157b47d0, type: 3}
+    volume: 0.4
+    pitch: 1
+    isLooping: 0
+    source: {fileID: 0}
+  - name: pistol reload
+    clip: {fileID: 8300000, guid: 5809c29cf4132c64eabe8d6ee0dafc71, type: 3}
+    volume: 0.4
+    pitch: 1
+    isLooping: 0
+    source: {fileID: 0}
