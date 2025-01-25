@@ -1674,6 +1674,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4011993362046504739}
   - component: {fileID: 7611258971839883644}
+  - component: {fileID: 8029272391991035025}
   - component: {fileID: 3408106831672947382}
   - component: {fileID: 8082414133372155523}
   - component: {fileID: 3457258762499132557}
@@ -1718,6 +1719,39 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
+--- !u!114 &8029272391991035025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5921675968873404333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 4011993362046504739}
+  syncPosition: 1
+  syncRotation: 0
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 1
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!114 &3408106831672947382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1820,10 +1854,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08c58cf9d7be2a440916b24e4cc68b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   playerRigidbody: {fileID: 8082414133372155523}
   playerCanvas: {fileID: 585386286773775708}
   playerHolder: {fileID: 6329279390439763973}
   playerMovement: {fileID: 3457258762499132557}
+  playerCamera: {fileID: 6321068011767939014}
   gameplaySceneName: Game Scene
 --- !u!1 &6321068011767939014
 GameObject:

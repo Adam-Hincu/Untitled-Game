@@ -1,14 +1,16 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Mirror;
 
-public class PlayerInitializer : MonoBehaviour
+public class PlayerInitializer : NetworkBehaviour
 {
     [Header("Player Components")]
     public Rigidbody playerRigidbody;
     public GameObject playerCanvas;
     public GameObject playerHolder;
     public MonoBehaviour playerMovement;    // This can be assigned to any movement script that inherits from MonoBehaviour
+    public GameObject playerCamera;         // New field for the camera
 
     [Header("Scene Management")]
     [SerializeField] private string gameplaySceneName;
@@ -19,9 +21,29 @@ public class PlayerInitializer : MonoBehaviour
         SetComponentsState(false);
     }
 
-    private void OnEnable()
+    public override void OnStartClient()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        base.OnStartClient();
+        
+        if (!isLocalPlayer)
+        {
+            // If this is not the local player, destroy non-local components
+            if (playerRigidbody != null) Destroy(playerRigidbody);
+            if (playerCanvas != null) Destroy(playerCanvas.gameObject);
+            if (playerMovement != null) Destroy(playerMovement);
+            if (playerCamera != null) Destroy(playerCamera);
+            
+            // For non-local players, we'll manage the holder in OnSceneLoaded
+            if (playerHolder != null)
+                playerHolder.SetActive(false);
+                
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        else
+        {
+            // For the local player, enable/disable based on scene
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
     }
 
     private void OnDisable()
@@ -32,7 +54,16 @@ public class PlayerInitializer : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         bool isGameplayScene = scene.name == gameplaySceneName;
-        SetComponentsState(isGameplayScene);
+        
+        if (isLocalPlayer)
+        {
+            SetComponentsState(isGameplayScene);
+        }
+        else if (playerHolder != null)
+        {
+            // For non-local players, only manage the holder
+            playerHolder.SetActive(isGameplayScene);
+        }
     }
 
     private void SetComponentsState(bool enabled)
@@ -48,5 +79,8 @@ public class PlayerInitializer : MonoBehaviour
 
         if (playerMovement != null)
             playerMovement.enabled = enabled;
+
+        if (playerCamera != null)
+            playerCamera.SetActive(enabled);
     }
 }
