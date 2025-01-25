@@ -17,10 +17,7 @@ public class LobbyController : MonoBehaviour
 	[SerializeField] private GameObject playerListItemPrefab;
 
 	[Header("Game Settings")]
-#if UNITY_EDITOR
-	[SerializeField] private UnityEditor.SceneAsset gameScene;
-#endif
-	[SerializeField] private string gameSceneName;
+	[SerializeField] private string gameSceneName = "GameScene";
 
 	// Local Player Reference
 	private PlayerObjectController _localPlayerController;
@@ -191,14 +188,4 @@ public class LobbyController : MonoBehaviour
 
 		NetworkManager.ServerChangeScene(gameSceneName);
 	}
-
-#if UNITY_EDITOR
-	private void OnValidate()
-	{
-		if (gameScene != null)
-		{
-			gameSceneName = gameScene.name;
-		}
-	}
-#endif
 }
