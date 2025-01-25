@@ -174,18 +174,9 @@ public class LobbyController : MonoBehaviour
 
 	public void StartGame()
 	{
-		if (!NetworkManager.isNetworkActive || !NetworkServer.active)
-			return;
-
-		// Clear the player list before changing scenes
-		foreach (var item in playerListItems)
+		if (NetworkServer.active && NetworkManager != null)
 		{
-			if (item != null && item.gameObject != null)
-				Destroy(item.gameObject);
+			NetworkManager.ServerChangeScene(gameSceneName);
 		}
-		playerListItems.Clear();
-		isPlayerListInitialized = false;
-
-		NetworkManager.ServerChangeScene(gameSceneName);
 	}
 }

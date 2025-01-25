@@ -1,10 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 public class PlayerInitializer : MonoBehaviour
 {
@@ -15,26 +11,10 @@ public class PlayerInitializer : MonoBehaviour
     public MonoBehaviour playerMovement;    // This can be assigned to any movement script that inherits from MonoBehaviour
 
     [Header("Scene Management")]
-    #if UNITY_EDITOR
-    [SerializeField] private SceneAsset[] gameplayScenes;
-    #endif
-    private string[] gameplaySceneNames;
+    [SerializeField] private string gameplaySceneName;
 
     private void Awake()
     {
-        // Convert SceneAssets to scene names
-        #if UNITY_EDITOR
-        if (gameplayScenes != null)
-        {
-            gameplaySceneNames = new string[gameplayScenes.Length];
-            for (int i = 0; i < gameplayScenes.Length; i++)
-            {
-                if (gameplayScenes[i] != null)
-                    gameplaySceneNames[i] = gameplayScenes[i].name;
-            }
-        }
-        #endif
-        
         // Initially disable components
         SetComponentsState(false);
     }
@@ -51,7 +31,7 @@ public class PlayerInitializer : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        bool isGameplayScene = System.Array.Exists(gameplaySceneNames, sceneName => sceneName == scene.name);
+        bool isGameplayScene = scene.name == gameplaySceneName;
         SetComponentsState(isGameplayScene);
     }
 

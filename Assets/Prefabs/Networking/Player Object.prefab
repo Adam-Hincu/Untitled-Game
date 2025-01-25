@@ -1757,7 +1757,7 @@ GameObject:
   - component: {fileID: 3408106831672947382}
   - component: {fileID: 8082414133372155523}
   - component: {fileID: 3457258762499132557}
-  - component: {fileID: 8810670866200665621}
+  - component: {fileID: 4606552101845153778}
   m_Layer: 0
   m_Name: Player Object
   m_TagString: Untagged
@@ -1888,7 +1888,7 @@ MonoBehaviour:
   showVaultDebug: 0
   vaultRadius: 0.3
   isWalking: 0
---- !u!114 &8810670866200665621
+--- !u!114 &4606552101845153778
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1904,8 +1904,7 @@ MonoBehaviour:
   playerCanvas: {fileID: 585386286773775708}
   playerHolder: {fileID: 6329279390439763973}
   playerMovement: {fileID: 3457258762499132557}
-  gameplayScenes:
-  - {fileID: 102900000, guid: 9062c91dd9d115c46a77497e4109fe59, type: 3}
+  gameplaySceneName: Game Scene
 --- !u!1 &6321068011767939014
 GameObject:
   m_ObjectHideFlags: 0
