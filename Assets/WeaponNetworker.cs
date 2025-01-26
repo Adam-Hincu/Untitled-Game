@@ -17,16 +17,17 @@ public class WeaponNetworker : NetworkBehaviour
 
     public void OnPlayerHit(HealthManager targetHealthManager, float damage)
     {
-        // Only the server should process the hit to avoid duplicate damage
         if (!isServer)
         {
-            // If we're not the server, tell the server about the hit
+            // Client hitting someone - tell the server
             CmdPlayerHit(targetHealthManager.gameObject, damage);
-            return;
         }
-
-        // If we are the server, apply damage directly
-        ApplyDamageToPlayer(targetHealthManager, damage);
+        else
+        {
+            // Server hitting someone - apply damage and tell all clients
+            RpcPlayerHit(targetHealthManager.gameObject, damage);
+            ApplyDamageToPlayer(targetHealthManager, damage);
+        }
     }
 
     [Command]
@@ -36,13 +37,27 @@ public class WeaponNetworker : NetworkBehaviour
         HealthManager healthManager = targetPlayer.GetComponent<HealthManager>();
         if (healthManager != null)
         {
+            // Apply damage and notify all clients including the original sender
+            RpcPlayerHit(targetPlayer, damage);
+            ApplyDamageToPlayer(healthManager, damage);
+        }
+    }
+
+    [ClientRpc]
+    private void RpcPlayerHit(GameObject targetPlayer, float damage)
+    {
+        // Skip if we're the server since the server already applied damage
+        if (isServer) return;
+
+        HealthManager healthManager = targetPlayer.GetComponent<HealthManager>();
+        if (healthManager != null)
+        {
             ApplyDamageToPlayer(healthManager, damage);
         }
     }
 
     private void ApplyDamageToPlayer(HealthManager healthManager, float damage)
     {
-        // Apply damage and notify all clients about the health change
         healthManager.TakeDamage(damage);
     }
 }
