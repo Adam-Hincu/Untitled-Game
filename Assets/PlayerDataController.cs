@@ -2,6 +2,16 @@ using UnityEngine;
 using Mirror;
 using Steamworks;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+
+[System.Serializable]
+public class PlayerData
+{
+    public ulong steamId;
+    public string playerName;
+    public Sprite avatar;
+}
 
 public class PlayerDataController : NetworkBehaviour
 {
@@ -14,6 +24,10 @@ public class PlayerDataController : NetworkBehaviour
     [SerializeField, ReadOnly]
     private Sprite playerAvatar;
     private Texture2D avatarTexture;
+
+    [Header("Other Players")]
+    [SerializeField, ReadOnly]
+    private List<PlayerData> otherPlayers = new List<PlayerData>();
 
     public override void OnStartClient()
     {
@@ -37,6 +51,40 @@ public class PlayerDataController : NetworkBehaviour
         
         // Tell the server to sync our data
         CmdSyncPlayerData(playerSteamId, playerName);
+
+        // Start tracking other players
+        InvokeRepeating(nameof(UpdateOtherPlayersList), 1f, 1f);
+    }
+
+    private void UpdateOtherPlayersList()
+    {
+        if (!isLocalPlayer) return;
+
+        // Clear old list
+        foreach (var player in otherPlayers)
+        {
+            if (player.avatar != null)
+                Destroy(player.avatar);
+        }
+        otherPlayers.Clear();
+
+        // Find all player controllers
+        var allPlayers = FindObjectsOfType<PlayerDataController>();
+        foreach (var player in allPlayers)
+        {
+            // Skip if it's our own data or if the player has no Steam ID yet
+            if (player == this || player.playerSteamId == 0) continue;
+
+            // Create new player data
+            PlayerData playerData = new PlayerData
+            {
+                steamId = player.playerSteamId,
+                playerName = player.playerName,
+                avatar = player.playerAvatar
+            };
+
+            otherPlayers.Add(playerData);
+        }
     }
 
     public override void OnStartServer()
@@ -95,6 +143,13 @@ public class PlayerDataController : NetworkBehaviour
             Destroy(avatarTexture);
         if (playerAvatar != null)
             Destroy(playerAvatar);
+            
+        // Clean up other players' avatars
+        foreach (var player in otherPlayers)
+        {
+            if (player.avatar != null)
+                Destroy(player.avatar);
+        }
     }
 
     // Update is called once per frame
