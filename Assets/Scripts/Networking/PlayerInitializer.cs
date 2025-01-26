@@ -11,6 +11,7 @@ public class PlayerInitializer : NetworkBehaviour
     public GameObject playerHolder;
     public MonoBehaviour playerMovement;    // This can be assigned to any movement script that inherits from MonoBehaviour
     public GameObject playerCamera;         // New field for the camera
+    public HealthManager healthManager;     // New field for health management
 
     [Header("Scene Management")]
     [SerializeField] private string gameplaySceneName;
@@ -82,5 +83,8 @@ public class PlayerInitializer : NetworkBehaviour
 
         if (playerCamera != null)
             playerCamera.SetActive(enabled);
+
+        if (healthManager != null)
+            healthManager.enabled = enabled;
     }
 }

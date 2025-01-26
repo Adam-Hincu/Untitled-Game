@@ -176,7 +176,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1188662843192734740}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -459,7 +459,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7644552921836048206}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Orientation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -705,6 +705,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1994077557316354352}
   - component: {fileID: 6959253226030392936}
+  - component: {fileID: 4174210600823605586}
   m_Layer: 6
   m_Name: Pistol
   m_TagString: Untagged
@@ -828,6 +829,12 @@ MonoBehaviour:
   fireRate: 0.15
   autoFire: 1
   shootKey: 323
+  range: 100
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  damage: 15
+  weaponNetworker: {fileID: 4174210600823605586}
   recoilMultiplier: 0.8
   bulletPrefab: {fileID: 8650050742116722089, guid: badd69fb74a63a44a9ddf1d507097954, type: 3}
   muzzleFlashPrefab: {fileID: 5333414136352531571, guid: d05794df79f23d2439eceb49febe3d44, type: 3}
@@ -847,6 +854,21 @@ MonoBehaviour:
   minReloadPitch: 0.95
   maxReloadPitch: 1.05
   additionalParticles: []
+--- !u!114 &4174210600823605586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4963471020042854991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d67b6455cc651d449b09db52b1e06010, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
 --- !u!1 &5300830138198153475
 GameObject:
   m_ObjectHideFlags: 0
@@ -859,7 +881,7 @@ GameObject:
   - component: {fileID: 8911016094433879003}
   - component: {fileID: 3096475089547132269}
   - component: {fileID: 72537673810822305}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1285,7 +1307,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 191
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1593,6 +1615,7 @@ GameObject:
   - component: {fileID: 8082414133372155523}
   - component: {fileID: 3457258762499132557}
   - component: {fileID: 1102743950458907949}
+  - component: {fileID: 5407245277775477767}
   m_Layer: 0
   m_Name: Player Object
   m_TagString: Untagged
@@ -1705,6 +1728,7 @@ MonoBehaviour:
   playerHolder: {fileID: 6329279390439763973}
   playerMovement: {fileID: 3457258762499132557}
   playerCamera: {fileID: 6321068011767939014}
+  healthManager: {fileID: 5407245277775477767}
   gameplaySceneName: Game Scene
 --- !u!54 &8082414133372155523
 Rigidbody:
@@ -1792,6 +1816,89 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a5381a7f8753644aabc4e2083e290f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  playerSteamId: 0
+  playerName: 
+  currentHealth: 0
+  playerAvatar: {fileID: 0}
+  otherPlayers: []
+--- !u!114 &5407245277775477767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5921675968873404333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4caf0373b7af1474cb0e0ad3a1a0e1d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 100
+  maxHealth: 100
+  timeToStartRegen: 20
+  regenAmountPerSecond: 15
+  healthFillImage: {fileID: 2286897695232368833}
+  healthBarHolder: {fileID: 3833865200934506317}
+  healthBarAnimationDuration: 0.3
+  healthBarAnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  healColor: {r: 0.019872863, g: 0.8805031, b: 0, a: 1}
+  damageColor: {r: 0.8050314, g: 0, b: 0, a: 1}
+  colorFlashDuration: 0.6
+  normalScale: {x: 1, y: 1, z: 1}
+  damageScalePunch: {x: 1.1, y: 1.1, z: 1.1}
+  scalePunchDuration: 0.7
+  scalePunchCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  playerDataController: {fileID: 1102743950458907949}
 --- !u!1 &6321068011767939014
 GameObject:
   m_ObjectHideFlags: 0

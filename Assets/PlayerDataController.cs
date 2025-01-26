@@ -11,6 +11,7 @@ public class PlayerData
     public ulong steamId;
     public string playerName;
     public Sprite avatar;
+    public float currentHealth;
 }
 
 public class PlayerDataController : NetworkBehaviour
@@ -20,17 +21,47 @@ public class PlayerDataController : NetworkBehaviour
     private ulong playerSteamId;
     [SyncVar, SerializeField, ReadOnly]
     private string playerName;
+    [SyncVar(hook = nameof(OnHealthChanged)), SerializeField, ReadOnly]
+    private float currentHealth;
     
     [SerializeField, ReadOnly]
     private Sprite playerAvatar;
     private Texture2D avatarTexture;
 
+    private HealthManager healthManager;
+
     [Header("Other Players")]
     [SerializeField, ReadOnly]
     private List<PlayerData> otherPlayers = new List<PlayerData>();
 
+    private void UpdateOtherPlayersList()
+    {
+        if (!isLocalPlayer) return;
+
+        // Clear old list
+        otherPlayers.Clear();
+
+        // Find all PlayerDataControllers in the scene
+        var allPlayers = FindObjectsOfType<PlayerDataController>();
+        
+        foreach (var player in allPlayers)
+        {
+            // Skip if it's our own controller
+            if (player == this || player.playerSteamId == 0) continue;
+
+            otherPlayers.Add(new PlayerData
+            {
+                steamId = player.playerSteamId,
+                playerName = player.playerName,
+                avatar = player.playerAvatar,
+                currentHealth = player.currentHealth
+            });
+        }
+    }
+
     public override void OnStartClient()
     {
+        healthManager = GetComponent<HealthManager>();
         if (!isLocalPlayer) 
         {
             if (playerSteamId != 0)
@@ -52,38 +83,15 @@ public class PlayerDataController : NetworkBehaviour
         // Tell the server to sync our data
         CmdSyncPlayerData(playerSteamId, playerName);
 
-        // Start tracking other players
+        // Start updating other players list
         InvokeRepeating(nameof(UpdateOtherPlayersList), 1f, 1f);
     }
 
-    private void UpdateOtherPlayersList()
+    public override void OnStopClient()
     {
-        if (!isLocalPlayer) return;
-
-        // Clear old list
-        foreach (var player in otherPlayers)
+        if (isLocalPlayer)
         {
-            if (player.avatar != null)
-                Destroy(player.avatar);
-        }
-        otherPlayers.Clear();
-
-        // Find all player controllers
-        var allPlayers = FindObjectsOfType<PlayerDataController>();
-        foreach (var player in allPlayers)
-        {
-            // Skip if it's our own data or if the player has no Steam ID yet
-            if (player == this || player.playerSteamId == 0) continue;
-
-            // Create new player data
-            PlayerData playerData = new PlayerData
-            {
-                steamId = player.playerSteamId,
-                playerName = player.playerName,
-                avatar = player.playerAvatar
-            };
-
-            otherPlayers.Add(playerData);
+            CancelInvoke(nameof(UpdateOtherPlayersList));
         }
     }
 
@@ -100,11 +108,25 @@ public class PlayerDataController : NetworkBehaviour
             UpdateAvatarFromSteamId();
     }
 
+    private void OnHealthChanged(float oldHealth, float newHealth)
+    {
+        if (healthManager != null)
+        {
+            healthManager.SetHealthFromSync(newHealth);
+        }
+    }
+
     [Command]
     private void CmdSyncPlayerData(ulong steamId, string name)
     {
         playerSteamId = steamId;
         playerName = name;
+    }
+
+    [Command]
+    public void CmdUpdateHealth(float newHealth)
+    {
+        currentHealth = newHealth;
     }
 
     private void UpdateAvatarFromSteamId()
@@ -143,13 +165,6 @@ public class PlayerDataController : NetworkBehaviour
             Destroy(avatarTexture);
         if (playerAvatar != null)
             Destroy(playerAvatar);
-            
-        // Clean up other players' avatars
-        foreach (var player in otherPlayers)
-        {
-            if (player.avatar != null)
-                Destroy(player.avatar);
-        }
     }
 
     // Update is called once per frame

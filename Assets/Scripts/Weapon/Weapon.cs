@@ -57,6 +57,10 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float fireRate = 0.1f;
     [SerializeField] private bool autoFire = false;
     [SerializeField] private KeyCode shootKey = KeyCode.Mouse0;
+    [SerializeField] private float range = 100f;
+    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private float damage = 20f;
+    [SerializeField] private WeaponNetworker weaponNetworker;
     [SerializeField] private float recoilMultiplier = 1f;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private GameObject muzzleFlashPrefab;
@@ -236,6 +240,22 @@ public class Weapon : MonoBehaviour
 
         currentBullets--;
         UpdateAmmoText();
+
+        // Perform raycast from center of screen
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, range, playerLayer))
+        {
+            // For now we just perform the raycast without any effects
+            Debug.DrawLine(ray.origin, hit.point, Color.red, 1f);
+            
+            // Try to find HealthManager on the hit object or its parent
+            HealthManager healthManager = hit.collider.GetComponentInParent<HealthManager>();
+            if (healthManager != null && weaponNetworker != null)
+            {
+                weaponNetworker.OnPlayerHit(healthManager, damage);
+            }
+        }
 
         // Start auto-reload countdown when we run out of ammo
         if (currentBullets <= 0 && enableAutoReload)
@@ -472,6 +492,10 @@ public class WeaponEditor : Editor
     SerializedProperty fireRate;
     SerializedProperty autoFire;
     SerializedProperty shootKey;
+    SerializedProperty range;
+    SerializedProperty playerLayer;
+    SerializedProperty damage;
+    SerializedProperty weaponNetworker;
     SerializedProperty recoilMultiplier;
     SerializedProperty bulletPrefab;
     SerializedProperty muzzleFlashPrefab;
@@ -518,6 +542,10 @@ public class WeaponEditor : Editor
         fireRate = serializedObject.FindProperty("fireRate");
         autoFire = serializedObject.FindProperty("autoFire");
         shootKey = serializedObject.FindProperty("shootKey");
+        range = serializedObject.FindProperty("range");
+        playerLayer = serializedObject.FindProperty("playerLayer");
+        damage = serializedObject.FindProperty("damage");
+        weaponNetworker = serializedObject.FindProperty("weaponNetworker");
         recoilMultiplier = serializedObject.FindProperty("recoilMultiplier");
         bulletPrefab = serializedObject.FindProperty("bulletPrefab");
         muzzleFlashPrefab = serializedObject.FindProperty("muzzleFlashPrefab");
@@ -616,6 +644,10 @@ public class WeaponEditor : Editor
             EditorGUILayout.PropertyField(fireRate);
             EditorGUILayout.PropertyField(autoFire);
             EditorGUILayout.PropertyField(shootKey);
+            EditorGUILayout.PropertyField(range);
+            EditorGUILayout.PropertyField(playerLayer);
+            EditorGUILayout.PropertyField(damage);
+            EditorGUILayout.PropertyField(weaponNetworker);
         }
 
         GUILayout.Space(5);

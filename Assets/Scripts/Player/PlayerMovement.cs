@@ -636,7 +636,7 @@ public class PlayerMovement : MonoBehaviour
 	private void TryVault(Vector3 wallNormal)
 	{
 		Vector3 moveDirection = lastMoveSpeed.normalized;
-		Vector3 rayStart = playerModel.transform.position + Vector3.up * eyeHeight;
+		Vector3 rayStart = transform.position + Vector3.up * eyeHeight;
 
 		// Debug all raycasts
 		if (showVaultDebug)
@@ -687,8 +687,8 @@ public class PlayerMovement : MonoBehaviour
 		Vector3 vaultDestination = groundHit.point + Vector3.up * playerHeight * 0.5f;
 
 		// Perform vault
-		MoveCamera.instance.vaultOffset += playerModel.transform.position - vaultDestination;
-		playerModel.transform.position = vaultDestination;
+		MoveCamera.instance.vaultOffset += transform.position - vaultDestination;
+		transform.position = vaultDestination;
 		rb.linearVelocity = lastMoveSpeed * vaultForwardBoost;
 	}
 	#endregion
@@ -774,10 +774,10 @@ public class PlayerMovement : MonoBehaviour
 
 	private void OnDrawGizmos()
 	{
-		if (!showVaultDebug || playerModel == null) return;
+		if (!showVaultDebug) return;
 
-		Vector3 moveDir = Application.isPlaying ? lastMoveSpeed.normalized : playerModel.transform.forward;
-		Vector3 rayStart = playerModel.transform.position + Vector3.up * eyeHeight;
+		Vector3 moveDir = Application.isPlaying ? lastMoveSpeed.normalized : transform.forward;
+		Vector3 rayStart = transform.position + Vector3.up * eyeHeight;
 		Vector3 vaultCheckPosition = rayStart + moveDir * vaultCheckDistance;
 
 		// Forward check visualization (Blue)
