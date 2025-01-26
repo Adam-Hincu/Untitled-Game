@@ -838,6 +838,7 @@ MonoBehaviour:
   recoilMultiplier: 0.8
   bulletPrefab: {fileID: 8650050742116722089, guid: badd69fb74a63a44a9ddf1d507097954, type: 3}
   muzzleFlashPrefab: {fileID: 5333414136352531571, guid: d05794df79f23d2439eceb49febe3d44, type: 3}
+  damageParticlePrefab: {fileID: 7204853437214555145, guid: c6b33d5591d749145b685e4bb15a4632, type: 3}
   weaponTip: {fileID: 3487389769890557641}
   muzzleFlashDuration: 2
   muzzleFlashOffset: {x: 0, y: 0, z: 0}

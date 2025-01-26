@@ -64,7 +64,8 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float recoilMultiplier = 1f;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private GameObject muzzleFlashPrefab;
-    [SerializeField] private Transform weaponTip; // Single point for both bullet and effects spawning
+    [SerializeField] private GameObject damageParticlePrefab;
+    [SerializeField] private Transform weaponTip;
     [SerializeField] private float muzzleFlashDuration = 1f;
     [SerializeField] private Vector3 muzzleFlashOffset;
 
@@ -254,6 +255,17 @@ public class Weapon : MonoBehaviour
             if (healthManager != null && weaponNetworker != null)
             {
                 weaponNetworker.OnPlayerHit(healthManager, damage);
+            }
+
+            // Spawn damage particles at hit point
+            if (damageParticlePrefab != null)
+            {
+                GameObject damageParticle = Instantiate(damageParticlePrefab, hit.point, Quaternion.identity);
+                DamageParticles damageParticleScript = damageParticle.GetComponent<DamageParticles>();
+                if (damageParticleScript != null && damageParticleScript.damageText != null)
+                {
+                    damageParticleScript.damageText.text = $"-{damage}";
+                }
             }
         }
 
@@ -532,6 +544,7 @@ public class WeaponEditor : Editor
     SerializedProperty crosshairGroup;
     SerializedProperty crosshairFadeInDuration;
     SerializedProperty crosshairFadeOutDuration;
+    SerializedProperty damageParticlePrefab;
 
     void OnEnable()
     {
@@ -548,6 +561,7 @@ public class WeaponEditor : Editor
         weaponNetworker = serializedObject.FindProperty("weaponNetworker");
         recoilMultiplier = serializedObject.FindProperty("recoilMultiplier");
         bulletPrefab = serializedObject.FindProperty("bulletPrefab");
+        damageParticlePrefab = serializedObject.FindProperty("damageParticlePrefab");
         muzzleFlashPrefab = serializedObject.FindProperty("muzzleFlashPrefab");
         weaponTip = serializedObject.FindProperty("weaponTip");
         muzzleFlashDuration = serializedObject.FindProperty("muzzleFlashDuration");
@@ -662,6 +676,7 @@ public class WeaponEditor : Editor
         {
             GUILayout.Label("Prefabs", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(bulletPrefab);
+            EditorGUILayout.PropertyField(damageParticlePrefab);
             EditorGUILayout.PropertyField(muzzleFlashPrefab);
             EditorGUILayout.PropertyField(weaponTip);
             EditorGUILayout.PropertyField(muzzleFlashDuration);
