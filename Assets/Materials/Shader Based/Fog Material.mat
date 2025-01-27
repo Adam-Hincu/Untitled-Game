@@ -28,7 +28,7 @@ Material:
     - _Glossiness: 0.5
     - _GradientDirection: 270
     - _GradientHeight: 3.26
-    - _GradientSmoothness: 0.17
+    - _GradientSmoothness: 0.13
     - _Metallic: 0
     - _OffsetX: 0
     - _OffsetY: 0.1

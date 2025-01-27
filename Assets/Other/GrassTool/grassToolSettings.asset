@@ -40,10 +40,10 @@ MonoBehaviour:
     m_Bits: 0
   hitMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 255
   paintMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 255
   brushSize: 4
   brushFalloffSize: 0.8
   Flow: 0
