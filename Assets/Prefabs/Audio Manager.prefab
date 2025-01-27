@@ -119,3 +119,21 @@ MonoBehaviour:
     pitch: 1
     isLooping: 0
     source: {fileID: 0}
+  - name: train engine
+    clip: {fileID: 8300000, guid: 713f3ad01d384074aa519c0571050c88, type: 3}
+    volume: 0.4
+    pitch: 1
+    isLooping: 1
+    source: {fileID: 0}
+  - name: train wheels 1
+    clip: {fileID: 8300000, guid: 04a70c45865e674428af57842802dfd4, type: 3}
+    volume: 0.4
+    pitch: 1
+    isLooping: 1
+    source: {fileID: 0}
+  - name: train wheels 2
+    clip: {fileID: 8300000, guid: 06bc52f5fea8ba644b37dfd125d166b3, type: 3}
+    volume: 0.4
+    pitch: 1
+    isLooping: 1
+    source: {fileID: 0}

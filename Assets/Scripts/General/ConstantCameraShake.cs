@@ -1,5 +1,6 @@
 using UnityEngine;
 using EZCameraShake;
+using System.Collections;
 
 public class ConstantCameraShake : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class ConstantCameraShake : MonoBehaviour
     [SerializeField] private bool shakeOnStart = true;
 
     private CameraShakeInstance shakeInstance;
+    private float currentMagnitude = 0f;
+    private Coroutine fadeCoroutine;
 
     private void Start()
     {
@@ -63,6 +66,84 @@ public class ConstantCameraShake : MonoBehaviour
         {
             shakeInstance.StartFadeOut(fadeOutTime);
             shakeInstance = null;
+        }
+    }
+
+    private IEnumerator FadeInShake(float duration)
+    {
+        float elapsedTime = 0f;
+        float startMagnitude = currentMagnitude;
+        
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            currentMagnitude = Mathf.Lerp(startMagnitude, magnitude, elapsedTime / duration);
+            
+            if (shakeInstance != null)
+            {
+                shakeInstance.Magnitude = currentMagnitude;
+            }
+            
+            yield return null;
+        }
+        
+        currentMagnitude = magnitude;
+        if (shakeInstance != null)
+        {
+            shakeInstance.Magnitude = magnitude;
+        }
+    }
+
+    private IEnumerator FadeOutShake(float duration)
+    {
+        float elapsedTime = 0f;
+        float startMagnitude = currentMagnitude;
+        
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            currentMagnitude = Mathf.Lerp(startMagnitude, 0f, elapsedTime / duration);
+            
+            if (shakeInstance != null)
+            {
+                shakeInstance.Magnitude = currentMagnitude;
+            }
+            
+            yield return null;
+        }
+        
+        currentMagnitude = 0f;
+        StopShaking();
+    }
+
+    public void StartShakingWithFade(float fadeDuration)
+    {
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+        }
+
+        // Start the continuous camera shake if not already started
+        if (shakeInstance == null)
+        {
+            shakeInstance = CameraShaker.Instance.StartShake(0f, roughness, 0f);
+            CameraShaker.Instance.DefaultPosInfluence = positionInfluence;
+            CameraShaker.Instance.DefaultRotInfluence = rotationInfluence;
+        }
+
+        fadeCoroutine = StartCoroutine(FadeInShake(fadeDuration));
+    }
+
+    public void StopShakingWithFade(float fadeDuration)
+    {
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+        }
+
+        if (shakeInstance != null)
+        {
+            fadeCoroutine = StartCoroutine(FadeOutShake(fadeDuration));
         }
     }
 

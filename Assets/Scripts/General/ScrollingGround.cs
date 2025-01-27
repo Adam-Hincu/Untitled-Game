@@ -4,10 +4,11 @@ public class ScrollingGround : MonoBehaviour
 {
     [SerializeField] private Transform ground1;
     [SerializeField] private Transform ground2;
-    [SerializeField] private float scrollSpeed = 20f;
+    [SerializeField] public float scrollSpeed = 20f;
     [SerializeField] private float groundLength = 2000f;
     
     private Vector3 resetPosition;
+    private bool isScrolling = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -15,9 +16,21 @@ public class ScrollingGround : MonoBehaviour
         resetPosition = new Vector3(groundLength, 0, 0);
     }
 
+    public void StartScrolling()
+    {
+        isScrolling = true;
+    }
+
+    public void StopScrolling()
+    {
+        isScrolling = false;
+    }
+
     // Update is called once per frame
     void Update()
     {
+        if (!isScrolling) return;
+
         // Move both grounds to the left
         ground1.Translate(Vector3.left * scrollSpeed * Time.deltaTime);
         ground2.Translate(Vector3.left * scrollSpeed * Time.deltaTime);
