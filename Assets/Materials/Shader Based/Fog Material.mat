@@ -28,15 +28,15 @@ Material:
     - _Glossiness: 0.5
     - _GradientDirection: 270
     - _GradientHeight: 3.26
-    - _GradientSmoothness: 0.01
+    - _GradientSmoothness: 0.03
     - _Metallic: 0
     - _OffsetX: 0
-    - _OffsetY: 0.01
+    - _OffsetY: 0.025
     - _ScaleX: 1
     - _ScaleY: 1
     - _Smoothness: 0
     m_Colors:
-    - _ColorA: {r: 1, g: 1, b: 1, a: 0}
-    - _ColorB: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorA: {r: 1, g: 0.7490196, b: 0.40392157, a: 0}
+    - _ColorB: {r: 1, g: 0.7490196, b: 0.40392157, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TrainSceneManager : MonoBehaviour
 {
@@ -25,8 +26,7 @@ public class TrainSceneManager : MonoBehaviour
     private class TrainEffectsSettings
     {
         [Header("Particle Systems")]
-        public ParticleSystem smokeSystem;
-        public ParticleSystem sparkSystem;
+        public List<ParticleSystem> particleSystems;
 
         [Header("Ground Effect")]
         public ScrollingGround scrollingGround;
@@ -73,20 +73,18 @@ public class TrainSceneManager : MonoBehaviour
     private void InitializeEffects()
     {
         // Initialize particle systems
-        particleSystems = new ParticleSystem[] 
+        if (effectsSettings.particleSystems != null)
         {
-            effectsSettings.smokeSystem,
-            effectsSettings.sparkSystem
-        };
-
-        initialEmissionRates = new float[particleSystems.Length];
-        for (int i = 0; i < particleSystems.Length; i++)
-        {
-            if (particleSystems[i] != null)
+            particleSystems = effectsSettings.particleSystems.ToArray();
+            initialEmissionRates = new float[particleSystems.Length];
+            for (int i = 0; i < particleSystems.Length; i++)
             {
-                initialEmissionRates[i] = particleSystems[i].emission.rateOverTime.constant;
-                var emission = particleSystems[i].emission;
-                emission.rateOverTime = 0;
+                if (particleSystems[i] != null)
+                {
+                    initialEmissionRates[i] = particleSystems[i].emission.rateOverTime.constant;
+                    var emission = particleSystems[i].emission;
+                    emission.rateOverTime = 0;
+                }
             }
         }
 
