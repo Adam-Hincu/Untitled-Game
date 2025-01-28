@@ -76,64 +76,82 @@ MonoBehaviour:
     volume: 0.8
     pitch: 1
     isLooping: 1
+    mixerGroup: {fileID: 0}
     source: {fileID: 0}
   - name: slide
     clip: {fileID: 8300000, guid: 9ebf82b2ad89fd84c9e7e44f3426a6a8, type: 3}
     volume: 0.2
     pitch: 1
     isLooping: 0
+    mixerGroup: {fileID: 0}
     source: {fileID: 0}
   - name: start slide
     clip: {fileID: 8300000, guid: 9ebf82b2ad89fd84c9e7e44f3426a6a8, type: 3}
     volume: 0.2
     pitch: 1
     isLooping: 0
+    mixerGroup: {fileID: 0}
     source: {fileID: 0}
   - name: jump
     clip: {fileID: 8300000, guid: 9ebf82b2ad89fd84c9e7e44f3426a6a8, type: 3}
     volume: 1
     pitch: 1
     isLooping: 0
+    mixerGroup: {fileID: 0}
     source: {fileID: 0}
   - name: land
     clip: {fileID: 8300000, guid: 9ebf82b2ad89fd84c9e7e44f3426a6a8, type: 3}
     volume: 0.4
     pitch: 1
     isLooping: 0
+    mixerGroup: {fileID: 0}
     source: {fileID: 0}
   - name: pistol shoot
     clip: {fileID: 8300000, guid: a0bbb3aea273f804aa28bcd4667837a6, type: 3}
     volume: 0.4
     pitch: 1
     isLooping: 0
+    mixerGroup: {fileID: 0}
     source: {fileID: 0}
   - name: empty mag
     clip: {fileID: 8300000, guid: 188822936494d8242b1c8d84157b47d0, type: 3}
     volume: 0.4
     pitch: 1
     isLooping: 0
+    mixerGroup: {fileID: 0}
     source: {fileID: 0}
   - name: pistol reload
     clip: {fileID: 8300000, guid: 5809c29cf4132c64eabe8d6ee0dafc71, type: 3}
     volume: 0.4
     pitch: 1
     isLooping: 0
+    mixerGroup: {fileID: 0}
     source: {fileID: 0}
   - name: train engine
     clip: {fileID: 8300000, guid: 713f3ad01d384074aa519c0571050c88, type: 3}
     volume: 0.4
     pitch: 1
     isLooping: 1
+    mixerGroup: {fileID: 0}
     source: {fileID: 0}
   - name: train wheels 1
     clip: {fileID: 8300000, guid: 04a70c45865e674428af57842802dfd4, type: 3}
     volume: 0.4
     pitch: 1
     isLooping: 1
+    mixerGroup: {fileID: 0}
     source: {fileID: 0}
   - name: train wheels 2
     clip: {fileID: 8300000, guid: 06bc52f5fea8ba644b37dfd125d166b3, type: 3}
     volume: 0.4
     pitch: 1
     isLooping: 1
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: jumppad
+    clip: {fileID: 8300000, guid: b20df1929d2365548bff641b4d9c96c3, type: 3}
+    volume: 1
+    pitch: 1
+    isLooping: 1
+    mixerGroup: {fileID: 0}
     source: {fileID: 0}

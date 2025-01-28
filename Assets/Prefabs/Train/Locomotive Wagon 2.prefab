@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8764579261386938180}
   - component: {fileID: 8672929993393122098}
   - component: {fileID: 6025806606902401390}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BackWheels.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6634748985409410250}
   - component: {fileID: 2776177713201185472}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Locomotive Wagon 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 526017226720589762}
   - component: {fileID: 665202619550410135}
   - component: {fileID: 8076332412078754030}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -269,8 +269,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.4781968, y: 2.0667222, z: 0.3542988}
-  m_Center: {x: 2.6408892, y: -7.831158e-15, z: 2.8207963}
+  m_Size: {x: 0.4781971, y: 0.47470513, z: 0.3542988}
+  m_Center: {x: 2.6408892, y: -0.0025688808, z: 2.8207963}
 --- !u!65 &8076332412078754030
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -290,8 +290,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.48271817, y: 2.0667222, z: 0.3542988}
-  m_Center: {x: -2.6428828, y: -7.831158e-15, z: 2.8207963}
+  m_Size: {x: 0.48271784, y: 0.46956694, z: 0.3542988}
+  m_Center: {x: -2.6428828, y: 0.0032466052, z: 2.8207963}
 --- !u!1 &2131001373872303961
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +301,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6323798093242920607}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Connection Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 7309794683985669024}
   - component: {fileID: 4334050730338294765}
   - component: {fileID: 4977146355656363796}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FrontWheels.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
