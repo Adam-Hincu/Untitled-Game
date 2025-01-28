@@ -1,4 +1,5 @@
 "Low-Poly Jericho 941" (https://skfb.ly/6xDBF) by TastyTony is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
-Cargo Train Front by Quaternius
-Cargo Train Wagon by Quaternius
+Locomotive Front by Quaternius (https://poly.pizza/m/WY84FHug9s)
+Locomotive Passenger Carriage by Quaternius (https://poly.pizza/m/woQPFlzPHM)
+Locomotive Wagon by Quaternius (https://poly.pizza/m/JCwr52pnuO)
