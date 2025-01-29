@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class HealthManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class HealthManager : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private Image healthFillImage;
     [SerializeField] private RectTransform healthBarHolder;
+    [SerializeField] private TextMeshProUGUI healthText;
     
     [Header("Animation Settings")]
     [SerializeField, Tooltip("Duration of the animation in seconds")] 
@@ -30,6 +32,18 @@ public class HealthManager : MonoBehaviour
     [SerializeField] private Color damageColor = Color.red;
     [SerializeField, Tooltip("Duration of the color flash in seconds")] 
     private float colorFlashDuration = 0.5f;
+
+    [Header("Text Color Settings")]
+    [SerializeField] private Color textNormalColor = Color.white;
+    [SerializeField] private Color textHealColor = Color.cyan;
+    [SerializeField] private Color textDamageColor = Color.red;
+    
+    [Header("Low Health State Settings")]
+    [SerializeField] private float lowHealthThreshold = 30f;
+    [SerializeField] private Color lowHealthTextColor = new Color(1f, 0f, 0f, 1f);
+    [SerializeField] private float lowHealthColorTransitionDuration = 0.5f;
+    private bool isInLowHealthState = false;
+    private Coroutine lowHealthTransitionCoroutine;
     
     [Header("Scale Animation Settings")]
     [SerializeField] private Vector3 normalScale = new Vector3(1f, 1f, 1f);
@@ -148,20 +162,40 @@ public class HealthManager : MonoBehaviour
         {
             StopCoroutine(colorAnimationCoroutine);
         }
-        colorAnimationCoroutine = StartCoroutine(AnimateHealthBarColor(flashColor));
+        
+        // Only animate the text color if we're not in low health state
+        if (!isInLowHealthState)
+        {
+            colorAnimationCoroutine = StartCoroutine(AnimateHealthBarColor(flashColor));
+        }
+        else
+        {
+            // If in low health state, only animate the health bar
+            colorAnimationCoroutine = StartCoroutine(AnimateOnlyHealthBar(flashColor));
+        }
     }
 
     private IEnumerator AnimateHealthBarColor(Color targetColor)
     {
         float elapsedTime = 0f;
-        Color startColor = healthFillImage.color;
+        Color startBarColor = healthFillImage.color;
+        Color startTextColor = healthText != null ? healthText.color : textNormalColor;
+        
+        // Determine which text color to use based on the target color
+        Color targetTextColor = targetColor == healColor ? textHealColor : 
+                               targetColor == damageColor ? textDamageColor : 
+                               textNormalColor;
         
         // Fade to target color
         while (elapsedTime < colorFlashDuration * 0.5f)
         {
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / (colorFlashDuration * 0.5f);
-            healthFillImage.color = Color.Lerp(startColor, targetColor, t);
+            healthFillImage.color = Color.Lerp(startBarColor, targetColor, t);
+            if (healthText != null)
+            {
+                healthText.color = Color.Lerp(startTextColor, targetTextColor, t);
+            }
             yield return null;
         }
         
@@ -173,10 +207,18 @@ public class HealthManager : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / (colorFlashDuration * 0.5f);
             healthFillImage.color = Color.Lerp(targetColor, normalColor, t);
+            if (healthText != null)
+            {
+                healthText.color = Color.Lerp(targetTextColor, textNormalColor, t);
+            }
             yield return null;
         }
         
         healthFillImage.color = normalColor;
+        if (healthText != null)
+        {
+            healthText.color = textNormalColor;
+        }
     }
 
     private void UpdateHealthUI()
@@ -191,6 +233,12 @@ public class HealthManager : MonoBehaviour
             }
             
             healthBarAnimationCoroutine = StartCoroutine(AnimateHealthBar());
+        }
+
+        if (healthText != null)
+        {
+            healthText.text = $"{Mathf.CeilToInt(currentHealth)}/{Mathf.CeilToInt(maxHealth)}";
+            CheckLowHealthState();
         }
     }
     
@@ -242,5 +290,67 @@ public class HealthManager : MonoBehaviour
         }
         
         healthBarHolder.localScale = normalScale;
+    }
+
+    private void CheckLowHealthState()
+    {
+        bool shouldBeLowHealth = currentHealth <= lowHealthThreshold;
+        
+        if (shouldBeLowHealth != isInLowHealthState)
+        {
+            isInLowHealthState = shouldBeLowHealth;
+            
+            if (lowHealthTransitionCoroutine != null)
+            {
+                StopCoroutine(lowHealthTransitionCoroutine);
+            }
+            
+            lowHealthTransitionCoroutine = StartCoroutine(TransitionToLowHealthState(shouldBeLowHealth));
+        }
+    }
+
+    private IEnumerator TransitionToLowHealthState(bool enteringLowHealth)
+    {
+        Color startColor = healthText.color;
+        Color targetColor = enteringLowHealth ? lowHealthTextColor : textNormalColor;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < lowHealthColorTransitionDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / lowHealthColorTransitionDuration;
+            healthText.color = Color.Lerp(startColor, targetColor, t);
+            yield return null;
+        }
+
+        healthText.color = targetColor;
+    }
+
+    private IEnumerator AnimateOnlyHealthBar(Color targetColor)
+    {
+        float elapsedTime = 0f;
+        Color startBarColor = healthFillImage.color;
+        
+        // Fade to target color
+        while (elapsedTime < colorFlashDuration * 0.5f)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / (colorFlashDuration * 0.5f);
+            healthFillImage.color = Color.Lerp(startBarColor, targetColor, t);
+            yield return null;
+        }
+        
+        elapsedTime = 0f;
+        
+        // Fade back to normal
+        while (elapsedTime < colorFlashDuration * 0.5f)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / (colorFlashDuration * 0.5f);
+            healthFillImage.color = Color.Lerp(targetColor, normalColor, t);
+            yield return null;
+        }
+        
+        healthFillImage.color = normalColor;
     }
 }
