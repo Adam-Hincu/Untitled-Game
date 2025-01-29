@@ -60,10 +60,17 @@ public class HealthManager : MonoBehaviour
     private Coroutine colorAnimationCoroutine;
     private Coroutine scaleAnimationCoroutine;
 
+    [Header("Text Animation Settings")]
+    [SerializeField] private float textAnimationDuration = 0.5f;
+    [SerializeField] private AnimationCurve textAnimationCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+    private float displayedHealth;
+    private Coroutine textAnimationCoroutine;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         currentHealth = maxHealth;
+        displayedHealth = currentHealth;
         if (healthBarHolder != null)
         {
             healthBarHolder.localScale = normalScale;
@@ -113,7 +120,16 @@ public class HealthManager : MonoBehaviour
 
     public void TakeDamage(float damageAmount)
     {
+        float previousHealth = currentHealth;
         currentHealth = Mathf.Max(0f, currentHealth - damageAmount);
+        
+        // Update the inspector value immediately
+        if (playerDataController != null)
+        {
+            playerDataController.CmdUpdateHealth(currentHealth);
+        }
+        
+        // Visual updates
         UpdateHealthUI();
         FlashHealthBarColor(damageColor);
         PunchScale();
@@ -121,29 +137,36 @@ public class HealthManager : MonoBehaviour
         // Reset regeneration timer when taking damage
         timeSinceLastDamage = 0f;
         regenTickTimer = 0f;
-        
-        if (playerDataController != null)
-        {
-            playerDataController.CmdUpdateHealth(currentHealth);
-        }
     }
 
     public void Heal(float healAmount)
     {
+        float previousHealth = currentHealth;
         currentHealth = Mathf.Min(maxHealth, currentHealth + healAmount);
-        UpdateHealthUI();
-        FlashHealthBarColor(healColor);
         
+        // Update the inspector value immediately
         if (playerDataController != null)
         {
             playerDataController.CmdUpdateHealth(currentHealth);
         }
+        
+        // Visual updates
+        UpdateHealthUI();
+        FlashHealthBarColor(healColor);
     }
 
     public void SetHealthFromSync(float newHealth)
     {
         float previousHealth = currentHealth;
         currentHealth = newHealth;
+        
+        // Update the inspector value immediately
+        if (playerDataController != null)
+        {
+            playerDataController.CmdUpdateHealth(currentHealth);
+        }
+        
+        // Visual updates
         UpdateHealthUI();
         
         if (currentHealth > previousHealth)
@@ -153,6 +176,7 @@ public class HealthManager : MonoBehaviour
         else if (currentHealth < previousHealth)
         {
             FlashHealthBarColor(damageColor);
+            PunchScale();
         }
     }
 
@@ -223,6 +247,7 @@ public class HealthManager : MonoBehaviour
 
     private void UpdateHealthUI()
     {
+        // Update health bar fill
         if (healthFillImage != null)
         {
             targetHealthFill = currentHealth / maxHealth;
@@ -235,9 +260,14 @@ public class HealthManager : MonoBehaviour
             healthBarAnimationCoroutine = StartCoroutine(AnimateHealthBar());
         }
 
+        // Update health text with animation
         if (healthText != null)
         {
-            healthText.text = $"{Mathf.CeilToInt(currentHealth)}/{Mathf.CeilToInt(maxHealth)}";
+            if (textAnimationCoroutine != null)
+            {
+                StopCoroutine(textAnimationCoroutine);
+            }
+            textAnimationCoroutine = StartCoroutine(AnimateHealthText());
             CheckLowHealthState();
         }
     }
@@ -256,6 +286,35 @@ public class HealthManager : MonoBehaviour
         }
         
         healthFillImage.fillAmount = targetHealthFill;
+    }
+
+    private IEnumerator AnimateHealthText()
+    {
+        float startHealth = displayedHealth;
+        float targetHealth = currentHealth;
+        float elapsedTime = 0f;
+        
+        while (elapsedTime < textAnimationDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = textAnimationCurve.Evaluate(elapsedTime / textAnimationDuration);
+            displayedHealth = Mathf.Lerp(startHealth, targetHealth, t);
+            
+            // Update the text with the current interpolated value
+            if (healthText != null)
+            {
+                healthText.text = $"{Mathf.CeilToInt(displayedHealth)}/{Mathf.CeilToInt(maxHealth)}";
+            }
+            
+            yield return null;
+        }
+        
+        // Ensure we end up at the exact target value
+        displayedHealth = targetHealth;
+        if (healthText != null)
+        {
+            healthText.text = $"{Mathf.CeilToInt(displayedHealth)}/{Mathf.CeilToInt(maxHealth)}";
+        }
     }
 
     private void PunchScale()
