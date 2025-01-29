@@ -427,6 +427,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3606942784642303658}
+  - component: {fileID: 7120279809260950965}
   m_Layer: 6
   m_Name: Weapon Holder
   m_TagString: Untagged
@@ -450,6 +451,21 @@ Transform:
   - {fileID: 1994077557316354352}
   m_Father: {fileID: 6703094267531314488}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7120279809260950965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2515740392013721165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d67b6455cc651d449b09db52b1e06010, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
 --- !u!1 &2727856979786529979
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,7 +721,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1994077557316354352}
   - component: {fileID: 6959253226030392936}
-  - component: {fileID: 4174210600823605586}
   m_Layer: 6
   m_Name: Pistol
   m_TagString: Untagged
@@ -834,7 +849,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   damage: 15
-  weaponNetworker: {fileID: 4174210600823605586}
+  weaponNetworker: {fileID: 0}
   recoilMultiplier: 0.8
   bulletPrefab: {fileID: 8650050742116722089, guid: badd69fb74a63a44a9ddf1d507097954, type: 3}
   muzzleFlashPrefab: {fileID: 5333414136352531571, guid: d05794df79f23d2439eceb49febe3d44, type: 3}
@@ -855,21 +870,6 @@ MonoBehaviour:
   minReloadPitch: 0.95
   maxReloadPitch: 1.05
   additionalParticles: []
---- !u!114 &4174210600823605586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4963471020042854991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d67b6455cc651d449b09db52b1e06010, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
 --- !u!1 &5300830138198153475
 GameObject:
   m_ObjectHideFlags: 0
