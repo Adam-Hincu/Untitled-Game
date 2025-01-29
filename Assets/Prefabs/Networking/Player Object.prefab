@@ -1876,7 +1876,7 @@ MonoBehaviour:
   colorFlashDuration: 0.6
   textNormalColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   textHealColor: {r: 0.008444467, g: 0.38, b: 0, a: 1}
-  textDamageColor: {r: 0.5, g: 0, b: 0, a: 1}
+  textDamageColor: {r: 0.65, g: 0, b: 0, a: 1}
   lowHealthThreshold: 50
   lowHealthTextColor: {r: 1, g: 1, b: 1, a: 1}
   lowHealthColorTransitionDuration: 0.5
