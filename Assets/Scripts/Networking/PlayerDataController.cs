@@ -83,8 +83,8 @@ public class PlayerDataController : NetworkBehaviour
         // Tell the server to sync our data
         CmdSyncPlayerData(playerSteamId, playerName);
 
-        // Start updating other players list
-        InvokeRepeating(nameof(UpdateOtherPlayersList), 1f, 1f);
+        // Start updating other players list - now every 0.1 seconds for more responsive updates
+        InvokeRepeating(nameof(UpdateOtherPlayersList), 0.1f, 0.1f);
     }
 
     public override void OnStopClient()
@@ -127,6 +127,21 @@ public class PlayerDataController : NetworkBehaviour
     public void CmdUpdateHealth(float newHealth)
     {
         currentHealth = newHealth;
+        // Immediately notify all clients of the health change
+        RpcUpdateHealth(newHealth);
+    }
+
+    [ClientRpc]
+    private void RpcUpdateHealth(float newHealth)
+    {
+        // Update the health value immediately on all clients
+        currentHealth = newHealth;
+        
+        // If this is not the local player and we have a health manager, update it
+        if (!isLocalPlayer && healthManager != null)
+        {
+            healthManager.SetHealthFromSync(newHealth);
+        }
     }
 
     private void UpdateAvatarFromSteamId()
