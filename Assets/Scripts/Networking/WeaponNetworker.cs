@@ -25,8 +25,8 @@ public class WeaponNetworker : NetworkBehaviour
         else
         {
             // Server hitting someone - apply damage and tell all clients
-            ApplyDamageToPlayer(targetHealthManager, damage);
             RpcPlayerHit(targetHealthManager.gameObject, damage);
+            ApplyDamageToPlayer(targetHealthManager, damage);
         }
     }
 
@@ -37,16 +37,16 @@ public class WeaponNetworker : NetworkBehaviour
         HealthManager healthManager = targetPlayer.GetComponent<HealthManager>();
         if (healthManager != null)
         {
-            // Apply damage on server and notify all clients except the server
-            ApplyDamageToPlayer(healthManager, damage);
+            // Apply damage and notify all clients including the original sender
             RpcPlayerHit(targetPlayer, damage);
+            ApplyDamageToPlayer(healthManager, damage);
         }
     }
 
     [ClientRpc]
     private void RpcPlayerHit(GameObject targetPlayer, float damage)
     {
-        // Only apply damage on non-server clients
+        // Skip if we're the server since the server already applied damage
         if (isServer) return;
 
         HealthManager healthManager = targetPlayer.GetComponent<HealthManager>();
