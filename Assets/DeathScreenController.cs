@@ -12,6 +12,8 @@ public class DeathScreenController : MonoBehaviour
     private float currentDeathTimer;
     private bool isDead = false;
 
+    public ulong killerId { get; private set; }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -32,11 +34,13 @@ public class DeathScreenController : MonoBehaviour
         }
     }
 
-    public void Kill()
+    public void Kill(ulong killerPlayerId = 0)
     {
-        Debug.Log("You died");
         isDead = true;
         currentDeathTimer = deathTime;
+        
+        // Store killer information
+        killerId = killerPlayerId;
 
         // Disable player movement when dead
         if (playerMovement != null)
@@ -65,7 +69,6 @@ public class DeathScreenController : MonoBehaviour
         {
             isDead = false;
             healthManager.Revive();
-            Debug.Log("You have been revived!");
 
             // Re-enable player movement when revived
             if (playerMovement != null)

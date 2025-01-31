@@ -68,6 +68,8 @@ public class HealthManager : MonoBehaviour
     [Header("Death Screen Reference")]
     [SerializeField] private DeathScreenController deathScreenController;
 
+    private ulong lastShooterId;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -156,15 +158,16 @@ public class HealthManager : MonoBehaviour
     public void KillPlayer()
     {
         currentHealth = 0f;
+        
         // Sync to network immediately
         SyncHealthToNetwork(currentHealth);
         // Update visuals
         SetHealthFromSync(currentHealth);
         
-        // Call the death screen controller's Kill function
+        // Call the death screen controller's Kill function with killer ID
         if (deathScreenController != null)
         {
-            deathScreenController.Kill();
+            deathScreenController.Kill(lastShooterId);
         }
         else
         {
@@ -181,7 +184,7 @@ public class HealthManager : MonoBehaviour
         SetHealthFromSync(currentHealth);
     }
 
-    public void TakeDamage(float damageAmount)
+    public void TakeDamage(float damageAmount, ulong shooterId)
     {
         // Don't take damage if already dead
         if (currentHealth <= 0f)
@@ -189,6 +192,9 @@ public class HealthManager : MonoBehaviour
 
         float previousHealth = currentHealth;
         currentHealth = Mathf.Max(0f, currentHealth - damageAmount);
+        
+        // Store the shooter's ID
+        lastShooterId = shooterId;
         
         // Sync to network immediately
         SyncHealthToNetwork(currentHealth);
@@ -210,6 +216,12 @@ public class HealthManager : MonoBehaviour
         // Reset regeneration timer when taking damage
         timeSinceLastDamage = 0f;
         regenTickTimer = 0f;
+    }
+
+    // Keep the old method for compatibility with any other code that might use it
+    public void TakeDamage(float damageAmount)
+    {
+        TakeDamage(damageAmount, 0);
     }
 
     public void Heal(float healAmount)

@@ -185,6 +185,16 @@ public class PlayerDataController : NetworkBehaviour
     {
         
     }
+
+    public string GetPlayerName()
+    {
+        return playerName;
+    }
+
+    public ulong GetPlayerId()
+    {
+        return playerSteamId;
+    }
 }
 
 // Attribute to make fields read-only in inspector
