@@ -195,6 +195,11 @@ public class PlayerDataController : NetworkBehaviour
     {
         return playerSteamId;
     }
+
+    public Sprite GetPlayerAvatar()
+    {
+        return playerAvatar;
+    }
 }
 
 // Attribute to make fields read-only in inspector

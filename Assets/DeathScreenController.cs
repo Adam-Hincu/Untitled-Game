@@ -1,4 +1,7 @@
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using System.Linq;
 
 public class DeathScreenController : MonoBehaviour
 {
@@ -6,11 +9,24 @@ public class DeathScreenController : MonoBehaviour
     [SerializeField] private HealthManager healthManager;
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private WeaponHolder weaponHolder;
+    [SerializeField] private PlayerDataController playerDataController;
+
+    [Header("UI References")]
+    [SerializeField] private CanvasGroup deathScreenCanvasGroup;
+    [SerializeField] private CanvasGroup gameUICanvasGroup;
+    [SerializeField] private TextMeshProUGUI killerNameText;
+    [SerializeField] private RawImage killerProfileImage;
 
     [Header("Death Settings")]
     [SerializeField] private float deathTime = 5f;
+    [SerializeField] private float fadeInDuration = 0.5f;
+    [SerializeField] private float fadeOutDuration = 0.5f;
+    
     private float currentDeathTimer;
+    private float currentFadeTimer;
     private bool isDead = false;
+    private bool isFadingIn = false;
+    private bool isFadingOut = false;
 
     public ulong killerId { get; private set; }
 
@@ -25,22 +41,92 @@ public class DeathScreenController : MonoBehaviour
     {
         if (isDead)
         {
-            currentDeathTimer -= Time.deltaTime;
-            
-            if (currentDeathTimer <= 0)
+            if (isFadingIn)
             {
-                RevivePlayer();
+                currentFadeTimer += Time.deltaTime;
+                float progress = currentFadeTimer / fadeInDuration;
+                
+                deathScreenCanvasGroup.alpha = Mathf.Lerp(0, 1, progress);
+                gameUICanvasGroup.alpha = Mathf.Lerp(1, 0, progress);
+
+                if (progress >= 1)
+                {
+                    isFadingIn = false;
+                    deathScreenCanvasGroup.alpha = 1;
+                    gameUICanvasGroup.alpha = 0;
+                }
+            }
+            else if (isFadingOut)
+            {
+                currentFadeTimer += Time.deltaTime;
+                float progress = currentFadeTimer / fadeOutDuration;
+                
+                deathScreenCanvasGroup.alpha = Mathf.Lerp(1, 0, progress);
+                gameUICanvasGroup.alpha = Mathf.Lerp(0, 1, progress);
+
+                if (progress >= 1)
+                {
+                    isFadingOut = false;
+                    deathScreenCanvasGroup.alpha = 0;
+                    gameUICanvasGroup.alpha = 1;
+                    isDead = false;
+                }
+            }
+            else
+            {
+                currentDeathTimer -= Time.deltaTime;
+                
+                if (currentDeathTimer <= 0)
+                {
+                    StartFadeOut();
+                }
             }
         }
+    }
+
+    private void StartFadeIn()
+    {
+        isFadingIn = true;
+        isFadingOut = false;
+        currentFadeTimer = 0;
+    }
+
+    private void StartFadeOut()
+    {
+        isFadingIn = false;
+        isFadingOut = true;
+        currentFadeTimer = 0;
+        RevivePlayer();
     }
 
     public void Kill(ulong killerPlayerId = 0)
     {
         isDead = true;
         currentDeathTimer = deathTime;
-        
-        // Store killer information
         killerId = killerPlayerId;
+
+        // Update killer information if we have a valid killer ID
+        if (killerId != 0 && playerDataController != null)
+        {
+            var allPlayers = FindObjectsByType<PlayerDataController>(FindObjectsSortMode.None);
+            var killerData = allPlayers.FirstOrDefault(p => p.GetPlayerId() == killerId);
+            
+            if (killerData != null)
+            {
+                killerNameText.text = killerData.GetPlayerName();
+                if (killerProfileImage != null)
+                {
+                    var killerAvatar = killerData.GetPlayerAvatar();
+                    if (killerAvatar != null)
+                    {
+                        killerProfileImage.texture = killerAvatar.texture;
+                    }
+                }
+            }
+        }
+
+        // Start the fade in transition
+        StartFadeIn();
 
         // Disable player movement when dead
         if (playerMovement != null)
@@ -67,7 +153,6 @@ public class DeathScreenController : MonoBehaviour
     {
         if (healthManager != null)
         {
-            isDead = false;
             healthManager.Revive();
 
             // Re-enable player movement when revived
