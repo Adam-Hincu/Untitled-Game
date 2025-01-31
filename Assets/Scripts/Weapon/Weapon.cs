@@ -1,8 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 using TMPro;
 using System.Collections.Generic;
 
@@ -17,24 +14,42 @@ public class AdditionalParticle
     public bool useObjectRotation = true;
 }
 
+[AddComponentMenu("Weapons/Weapon")]
 public class Weapon : MonoBehaviour
 {
     private GunRecoil recoilScript;
 
+    [Header("References")]
+    [Space(10)]
+    [Tooltip("Reference to the weapon sway component")]
+    [SerializeField] private WeaponSway weaponSway;
+    [Tooltip("Reference to the gun bobbing component")]
+    [SerializeField] private GunBobbing gunBobbing;
+
     [Header("Magazine Settings")]
+    [Space(10)]
+    [Tooltip("Maximum number of bullets in magazine")]
     [SerializeField] private int magazineSize = 30;
+    [Tooltip("Current magazine size (View-only)")]
     [SerializeField] private int currentMagazineSize; // View-only in inspector
     private int currentBullets;
 
     [Header("UI Settings")]
+    [Space(10)]
     [SerializeField] private TextMeshProUGUI magazineText; // Total magazine size display
     [SerializeField] private TextMeshProUGUI currentAmmoText; // Current ammo display
+    
+    [Header("Progress Bar Settings")]
+    [Space(5)]
     [SerializeField] private Image reloadProgressBar;
     [SerializeField] private CanvasGroup progressBarGroup;
     [SerializeField] private float progressBarFadeInDuration = 0.2f;
     [SerializeField] private float progressBarFadeOutDuration = 0.2f;
     [SerializeField] private float progressBarDuration = 1.5f;
     [SerializeField] private AnimationCurve progressBarCurve;
+    
+    [Header("Crosshair Settings")]
+    [Space(5)]
     [SerializeField] private Image crosshair;
     [SerializeField] private CanvasGroup crosshairGroup;
     [SerializeField] private float crosshairFadeInDuration = 0.2f;
@@ -45,15 +60,20 @@ public class Weapon : MonoBehaviour
     private float targetCrosshairAlpha = 1f;
 
     [Header("Reload Settings")]
+    [Space(10)]
     [SerializeField] private float reloadTime = 2f;
     [SerializeField] private int spinAmount = 2; // How many 360 spins during reload
     [SerializeField] private AnimationCurve spinCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     [SerializeField] private KeyCode reloadKey = KeyCode.R;
     [SerializeField] private Transform weaponModel; // Reference to the actual weapon model
+    
+    [Header("Auto Reload Settings")]
+    [Space(5)]
     [SerializeField] private bool enableAutoReload = true;
     [SerializeField] private float autoReloadDelay = 3f; // Time to wait before auto-reloading
 
     [Header("Fire Settings")]
+    [Space(10)]
     [SerializeField] private float fireRate = 0.1f;
     [SerializeField] private bool autoFire = false;
     [SerializeField] private KeyCode shootKey = KeyCode.Mouse0;
@@ -62,6 +82,9 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float damage = 20f;
     [SerializeField] private WeaponNetworker weaponNetworker;
     [SerializeField] private float recoilMultiplier = 1f;
+
+    [Header("Visual Effects")]
+    [Space(10)]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private GameObject muzzleFlashPrefab;
     [SerializeField] private GameObject damageParticlePrefab;
@@ -70,20 +93,30 @@ public class Weapon : MonoBehaviour
     [SerializeField] private Vector3 muzzleFlashOffset;
 
     [Header("Audio Settings")]
+    [Space(10)]
+    [Header("Shoot Sound")]
+    [Space(5)]
     [SerializeField] private string shootSoundName = "shoot";
     [SerializeField] private bool useRandomShootPitch = false;
     [SerializeField] private float minShootPitch = 0.9f;
     [SerializeField] private float maxShootPitch = 1.1f;
+    
+    [Header("Empty Magazine Sound")]
     [Space(5)]
     [SerializeField] private string emptyMagSoundName = "empty_mag";
     [SerializeField] private bool useRandomEmptyPitch = false;
     [SerializeField] private float minEmptyPitch = 0.9f;
     [SerializeField] private float maxEmptyPitch = 1.1f;
+    
+    [Header("Reload Sound")]
     [Space(5)]
     [SerializeField] private string reloadSoundName = "reload";
     [SerializeField] private bool useRandomReloadPitch = false;
     [SerializeField] private float minReloadPitch = 0.9f;
     [SerializeField] private float maxReloadPitch = 1.1f;
+
+    [Header("Additional Effects")]
+    [Space(10)]
     [SerializeField] private AdditionalParticle[] additionalParticles;
 
     private bool canShoot = true;
@@ -492,245 +525,3 @@ public class Weapon : MonoBehaviour
         }
     }
 }
-
-#if UNITY_EDITOR
-[CustomEditor(typeof(Weapon))]
-public class WeaponEditor : Editor
-{
-    SerializedProperty magazineSize;
-    SerializedProperty currentMagazineSize;
-    SerializedProperty magazineText;
-    SerializedProperty currentAmmoText;
-    SerializedProperty fireRate;
-    SerializedProperty autoFire;
-    SerializedProperty shootKey;
-    SerializedProperty range;
-    SerializedProperty playerLayer;
-    SerializedProperty damage;
-    SerializedProperty weaponNetworker;
-    SerializedProperty recoilMultiplier;
-    SerializedProperty bulletPrefab;
-    SerializedProperty muzzleFlashPrefab;
-    SerializedProperty weaponTip;
-    SerializedProperty muzzleFlashDuration;
-    SerializedProperty muzzleFlashOffset;
-    SerializedProperty shootSoundName;
-    SerializedProperty emptyMagSoundName;
-    SerializedProperty useRandomShootPitch;
-    SerializedProperty minShootPitch;
-    SerializedProperty maxShootPitch;
-    SerializedProperty useRandomEmptyPitch;
-    SerializedProperty minEmptyPitch;
-    SerializedProperty maxEmptyPitch;
-    SerializedProperty additionalParticles;
-    SerializedProperty reloadTime;
-    SerializedProperty spinAmount;
-    SerializedProperty spinCurve;
-    SerializedProperty reloadKey;
-    SerializedProperty enableAutoReload;
-    SerializedProperty autoReloadDelay;
-    SerializedProperty weaponModel;
-    SerializedProperty reloadSoundName;
-    SerializedProperty useRandomReloadPitch;
-    SerializedProperty minReloadPitch;
-    SerializedProperty maxReloadPitch;
-    SerializedProperty reloadProgressBar;
-    SerializedProperty progressBarDuration;
-    SerializedProperty crosshair;
-    SerializedProperty progressBarCurve;
-    SerializedProperty progressBarGroup;
-    SerializedProperty progressBarFadeInDuration;
-    SerializedProperty progressBarFadeOutDuration;
-    SerializedProperty crosshairGroup;
-    SerializedProperty crosshairFadeInDuration;
-    SerializedProperty crosshairFadeOutDuration;
-    SerializedProperty damageParticlePrefab;
-
-    void OnEnable()
-    {
-        magazineSize = serializedObject.FindProperty("magazineSize");
-        currentMagazineSize = serializedObject.FindProperty("currentMagazineSize");
-        magazineText = serializedObject.FindProperty("magazineText");
-        currentAmmoText = serializedObject.FindProperty("currentAmmoText");
-        fireRate = serializedObject.FindProperty("fireRate");
-        autoFire = serializedObject.FindProperty("autoFire");
-        shootKey = serializedObject.FindProperty("shootKey");
-        range = serializedObject.FindProperty("range");
-        playerLayer = serializedObject.FindProperty("playerLayer");
-        damage = serializedObject.FindProperty("damage");
-        weaponNetworker = serializedObject.FindProperty("weaponNetworker");
-        recoilMultiplier = serializedObject.FindProperty("recoilMultiplier");
-        bulletPrefab = serializedObject.FindProperty("bulletPrefab");
-        damageParticlePrefab = serializedObject.FindProperty("damageParticlePrefab");
-        muzzleFlashPrefab = serializedObject.FindProperty("muzzleFlashPrefab");
-        weaponTip = serializedObject.FindProperty("weaponTip");
-        muzzleFlashDuration = serializedObject.FindProperty("muzzleFlashDuration");
-        muzzleFlashOffset = serializedObject.FindProperty("muzzleFlashOffset");
-        shootSoundName = serializedObject.FindProperty("shootSoundName");
-        emptyMagSoundName = serializedObject.FindProperty("emptyMagSoundName");
-        useRandomShootPitch = serializedObject.FindProperty("useRandomShootPitch");
-        minShootPitch = serializedObject.FindProperty("minShootPitch");
-        maxShootPitch = serializedObject.FindProperty("maxShootPitch");
-        useRandomEmptyPitch = serializedObject.FindProperty("useRandomEmptyPitch");
-        minEmptyPitch = serializedObject.FindProperty("minEmptyPitch");
-        maxEmptyPitch = serializedObject.FindProperty("maxEmptyPitch");
-        additionalParticles = serializedObject.FindProperty("additionalParticles");
-        reloadTime = serializedObject.FindProperty("reloadTime");
-        spinAmount = serializedObject.FindProperty("spinAmount");
-        spinCurve = serializedObject.FindProperty("spinCurve");
-        reloadKey = serializedObject.FindProperty("reloadKey");
-        enableAutoReload = serializedObject.FindProperty("enableAutoReload");
-        autoReloadDelay = serializedObject.FindProperty("autoReloadDelay");
-        weaponModel = serializedObject.FindProperty("weaponModel");
-        reloadSoundName = serializedObject.FindProperty("reloadSoundName");
-        useRandomReloadPitch = serializedObject.FindProperty("useRandomReloadPitch");
-        minReloadPitch = serializedObject.FindProperty("minReloadPitch");
-        maxReloadPitch = serializedObject.FindProperty("maxReloadPitch");
-        reloadProgressBar = serializedObject.FindProperty("reloadProgressBar");
-        progressBarDuration = serializedObject.FindProperty("progressBarDuration");
-        crosshair = serializedObject.FindProperty("crosshair");
-        progressBarCurve = serializedObject.FindProperty("progressBarCurve");
-        progressBarGroup = serializedObject.FindProperty("progressBarGroup");
-        progressBarFadeInDuration = serializedObject.FindProperty("progressBarFadeInDuration");
-        progressBarFadeOutDuration = serializedObject.FindProperty("progressBarFadeOutDuration");
-        crosshairGroup = serializedObject.FindProperty("crosshairGroup");
-        crosshairFadeInDuration = serializedObject.FindProperty("crosshairFadeInDuration");
-        crosshairFadeOutDuration = serializedObject.FindProperty("crosshairFadeOutDuration");
-    }
-
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
-
-        GUILayout.Space(5);
-        using (new GUILayout.VerticalScope(EditorStyles.helpBox))
-        {
-            GUILayout.Label("Magazine Settings", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(magazineSize);
-            GUI.enabled = false;
-            EditorGUILayout.PropertyField(currentMagazineSize);
-            GUI.enabled = true;
-        }
-
-        GUILayout.Space(5);
-        using (new GUILayout.VerticalScope(EditorStyles.helpBox))
-        {
-            GUILayout.Label("UI Settings", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(magazineText);
-            EditorGUILayout.PropertyField(currentAmmoText);
-            EditorGUILayout.Space(5);
-            EditorGUILayout.PropertyField(reloadProgressBar);
-            EditorGUILayout.PropertyField(progressBarGroup);
-            EditorGUILayout.PropertyField(progressBarFadeInDuration);
-            EditorGUILayout.PropertyField(progressBarFadeOutDuration);
-            EditorGUILayout.PropertyField(progressBarDuration);
-            EditorGUILayout.PropertyField(progressBarCurve);
-            EditorGUILayout.Space(5);
-            EditorGUILayout.PropertyField(crosshair);
-            EditorGUILayout.PropertyField(crosshairGroup);
-            EditorGUILayout.PropertyField(crosshairFadeInDuration);
-            EditorGUILayout.PropertyField(crosshairFadeOutDuration);
-        }
-
-        GUILayout.Space(5);
-        using (new GUILayout.VerticalScope(EditorStyles.helpBox))
-        {
-            GUILayout.Label("Reload Settings", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(reloadTime);
-            EditorGUILayout.PropertyField(spinAmount);
-            EditorGUILayout.PropertyField(spinCurve);
-            EditorGUILayout.PropertyField(reloadKey);
-            EditorGUILayout.PropertyField(weaponModel);
-            EditorGUILayout.Space(5);
-            EditorGUILayout.PropertyField(enableAutoReload);
-            if (enableAutoReload.boolValue)
-            {
-                EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(autoReloadDelay);
-                EditorGUI.indentLevel--;
-            }
-        }
-
-        GUILayout.Space(5);
-        using (new GUILayout.VerticalScope(EditorStyles.helpBox))
-        {
-            GUILayout.Label("Fire Settings", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(fireRate);
-            EditorGUILayout.PropertyField(autoFire);
-            EditorGUILayout.PropertyField(shootKey);
-            EditorGUILayout.PropertyField(range);
-            EditorGUILayout.PropertyField(playerLayer);
-            EditorGUILayout.PropertyField(damage);
-            EditorGUILayout.PropertyField(weaponNetworker);
-        }
-
-        GUILayout.Space(5);
-        using (new GUILayout.VerticalScope(EditorStyles.helpBox))
-        {
-            GUILayout.Label("Recoil", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(recoilMultiplier);
-        }
-
-        GUILayout.Space(5);
-        using (new GUILayout.VerticalScope(EditorStyles.helpBox))
-        {
-            GUILayout.Label("Prefabs", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(bulletPrefab);
-            EditorGUILayout.PropertyField(damageParticlePrefab);
-            EditorGUILayout.PropertyField(muzzleFlashPrefab);
-            EditorGUILayout.PropertyField(weaponTip);
-            EditorGUILayout.PropertyField(muzzleFlashDuration);
-            EditorGUILayout.PropertyField(muzzleFlashOffset);
-        }
-
-        GUILayout.Space(5);
-        using (new GUILayout.VerticalScope(EditorStyles.helpBox))
-        {
-            GUILayout.Label("Audio Settings", EditorStyles.boldLabel);
-            
-            EditorGUILayout.LabelField("Shoot Sound", EditorStyles.boldLabel);
-            EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(shootSoundName);
-            EditorGUILayout.PropertyField(useRandomShootPitch);
-            if (useRandomShootPitch.boolValue)
-            {
-                EditorGUILayout.PropertyField(minShootPitch);
-                EditorGUILayout.PropertyField(maxShootPitch);
-            }
-            EditorGUI.indentLevel--;
-
-            EditorGUILayout.Space(5);
-            
-            EditorGUILayout.LabelField("Empty Magazine Sound", EditorStyles.boldLabel);
-            EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(emptyMagSoundName);
-            EditorGUILayout.PropertyField(useRandomEmptyPitch);
-            if (useRandomEmptyPitch.boolValue)
-            {
-                EditorGUILayout.PropertyField(minEmptyPitch);
-                EditorGUILayout.PropertyField(maxEmptyPitch);
-            }
-            EditorGUI.indentLevel--;
-
-            EditorGUILayout.Space(5);
-            
-            EditorGUILayout.LabelField("Reload Sound", EditorStyles.boldLabel);
-            EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(reloadSoundName);
-            EditorGUILayout.PropertyField(useRandomReloadPitch);
-            if (useRandomReloadPitch.boolValue)
-            {
-                EditorGUILayout.PropertyField(minReloadPitch);
-                EditorGUILayout.PropertyField(maxReloadPitch);
-            }
-            EditorGUI.indentLevel--;
-        }
-
-        GUILayout.Space(5);
-        GUILayout.Label("Additional Particles", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(additionalParticles);
-
-        serializedObject.ApplyModifiedProperties();
-    }
-}
-#endif

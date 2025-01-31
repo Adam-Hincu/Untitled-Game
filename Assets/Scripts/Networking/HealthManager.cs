@@ -66,6 +66,9 @@ public class HealthManager : MonoBehaviour
     private float displayedHealth;
     private Coroutine textAnimationCoroutine;
 
+    [Header("Death Screen Reference")]
+    [SerializeField] private DeathScreenController deathScreenController;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -118,10 +121,42 @@ public class HealthManager : MonoBehaviour
         }
     }
 
+    public void KillPlayer()
+    {
+        // Set health to 0 with animation
+        SetHealthFromSync(0f);
+        
+        // Call the death screen controller's Kill function
+        if (deathScreenController != null)
+        {
+            deathScreenController.Kill();
+        }
+        else
+        {
+            Debug.LogError("DeathScreenController reference is missing in HealthManager!");
+        }
+    }
+
+    public void Revive()
+    {
+        // Set health back to max with animation
+        SetHealthFromSync(maxHealth);
+    }
+
     public void TakeDamage(float damageAmount)
     {
+        // Don't take damage if already dead
+        if (currentHealth <= 0f)
+            return;
+
         float previousHealth = currentHealth;
         currentHealth = Mathf.Max(0f, currentHealth - damageAmount);
+        
+        // Check if player died
+        if (currentHealth <= 0f)
+        {
+            KillPlayer();
+        }
         
         // Update the inspector value immediately
         if (playerDataController != null)
@@ -141,6 +176,10 @@ public class HealthManager : MonoBehaviour
 
     public void Heal(float healAmount)
     {
+        // Don't heal if dead or already at max health
+        if (currentHealth <= 0f || currentHealth >= maxHealth)
+            return;
+
         float previousHealth = currentHealth;
         currentHealth = Mathf.Min(maxHealth, currentHealth + healAmount);
         

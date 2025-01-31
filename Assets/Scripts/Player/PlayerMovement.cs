@@ -86,6 +86,9 @@ public class PlayerMovement : MonoBehaviour
 
 	[HideInInspector] public bool isWalking;
 
+	private bool m_CanMove = true;
+	private bool m_CanLook = true;
+
 	#endregion
 
 	#region private-vectors
@@ -138,6 +141,16 @@ public class PlayerMovement : MonoBehaviour
 
 	private void MyInput()
 	{
+		if (!m_CanMove)
+		{
+			x = 0;
+			y = 0;
+			jumping = false;
+			crouching = false;
+			isWalking = false;
+			return;
+		}
+
 		x = Input.GetAxisRaw("Horizontal");
 		y = Input.GetAxisRaw("Vertical");
 		jumping = Input.GetButton("Jump");
@@ -397,6 +410,8 @@ public class PlayerMovement : MonoBehaviour
 	#region Camera
 	private void Look()
 	{
+		if (!m_CanLook) return;
+
 		float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
 		float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
 
@@ -834,4 +849,38 @@ public class PlayerMovement : MonoBehaviour
 			Gizmos.DrawLine(bottom, top);
 		}
 	}
+
+	#region Control-Toggle-Functions
+	public void DisablePlayerControls()
+	{
+		m_CanMove = false;
+	}
+
+	public void EnablePlayerControls()
+	{
+		m_CanMove = true;
+	}
+
+	public void DisableLooking()
+	{
+		m_CanLook = false;
+	}
+
+	public void EnableLooking()
+	{
+		m_CanLook = true;
+	}
+
+	public void DisableAllControls()
+	{
+		DisablePlayerControls();
+		DisableLooking();
+	}
+
+	public void EnableAllControls()
+	{
+		EnablePlayerControls();
+		EnableLooking();
+	}
+	#endregion
 }

@@ -19,16 +19,9 @@ public class WeaponSway : MonoBehaviour
 
 	public static WeaponSway Instance { get; private set; }
 
-	private static bool isSwayEnabled = true;
-
 	private Vector2 mouseInputAccumulation;
 	private float inputSmoothSpeed = 10f;
 	private float inputAccumulationDecay = 5f;
-
-	public static void SetSwayEnabled(bool enabled)
-	{
-		isSwayEnabled = enabled;
-	}
 
 	public void ResetPos()
 	{
@@ -52,19 +45,10 @@ public class WeaponSway : MonoBehaviour
 	{
 		Instance = this;
 		startPos = transform.localPosition;
-		// Enable sway by default when the component starts
-		SetSwayEnabled(true);
 	}
 
 	private void Update()
 	{
-		if (!isSwayEnabled)
-		{
-			transform.localPosition = Vector3.Lerp(transform.localPosition, startPos, Time.deltaTime * 15f);
-			transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.identity, Time.deltaTime * 15f);
-			return;
-		}
-
 		// Remove swaySpeed from input calculation
 		Vector2 currentInput = new Vector2(
 			-Input.GetAxis("Mouse X") * gunDrag * currentGunDragMultiplier,
@@ -111,5 +95,15 @@ public class WeaponSway : MonoBehaviour
 		{
 			// Handle exception if necessary
 		}
+	}
+
+	public void DisableSway()
+	{
+
+	}
+
+	public void EnableSway()
+	{
+
 	}
 }

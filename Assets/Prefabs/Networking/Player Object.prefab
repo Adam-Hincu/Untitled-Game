@@ -321,6 +321,7 @@ MonoBehaviour:
   gunDrag: 0.2
   currentGunDragMultiplier: 0.05
   swaySpeed: 2.2
+  returnToDefaultSpeed: 999
 --- !u!1 &1222352097626409637
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,6 +757,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d627fb9a2076d4347ae7a70333eb94f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponSway: {fileID: 6344370836107803697}
+  gunBobbing: {fileID: 865456007898461677}
   magazineSize: 10
   currentMagazineSize: 0
   magazineText: {fileID: 1625390282782821706}
@@ -1933,6 +1936,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  deathScreenController: {fileID: 7785125502677728011}
 --- !u!1 &6321068011767939014
 GameObject:
   m_ObjectHideFlags: 0
@@ -2258,6 +2262,7 @@ GameObject:
   - component: {fileID: 3314066639778723981}
   - component: {fileID: 4330714952918529205}
   - component: {fileID: 4242786891119366195}
+  - component: {fileID: 7785125502677728011}
   m_Layer: 5
   m_Name: Player Canvas
   m_TagString: Untagged
@@ -2348,6 +2353,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &7785125502677728011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8075497529631459599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eacdf8b40c8ad2c4d9bc2ca45331ffa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthManager: {fileID: 5407245277775477767}
+  playerMovement: {fileID: 3457258762499132557}
+  weapon: {fileID: 6959253226030392936}
+  deathTime: 5
 --- !u!1 &8082853545063453160
 GameObject:
   m_ObjectHideFlags: 0
