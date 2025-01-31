@@ -16,6 +16,7 @@ public class WeaponSway : MonoBehaviour
 	public float currentGunDragMultiplier = 1f;
 
 	public float swaySpeed = 1f;
+	private bool isEnabled = true;
 
 	public static WeaponSway Instance { get; private set; }
 
@@ -40,7 +41,6 @@ public class WeaponSway : MonoBehaviour
 		gameObject.transform.localRotation = Quaternion.identity;
 	}
 
-
 	private void Start()
 	{
 		Instance = this;
@@ -49,6 +49,14 @@ public class WeaponSway : MonoBehaviour
 
 	private void Update()
 	{
+		if (!isEnabled)
+		{
+			// Smoothly return to starting position when disabled
+			transform.localPosition = Vector3.Lerp(transform.localPosition, startPos, Time.deltaTime * 10f);
+			transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.identity, Time.deltaTime * 10f);
+			return;
+		}
+
 		// Remove swaySpeed from input calculation
 		Vector2 currentInput = new Vector2(
 			-Input.GetAxis("Mouse X") * gunDrag * currentGunDragMultiplier,
@@ -99,11 +107,14 @@ public class WeaponSway : MonoBehaviour
 
 	public void DisableSway()
 	{
-
+		isEnabled = false;
+		mouseInputAccumulation = Vector2.zero;
+		desX = 0f;
+		desY = 0f;
 	}
 
 	public void EnableSway()
 	{
-
+		isEnabled = true;
 	}
 }

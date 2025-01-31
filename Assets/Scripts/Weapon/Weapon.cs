@@ -524,4 +524,74 @@ public class Weapon : MonoBehaviour
             spinCurve.postWrapMode = WrapMode.Clamp;
         }
     }
+
+    /// <summary>
+    /// Disables all weapon functionality including shooting and reloading
+    /// </summary>
+    public void DisableWeapon()
+    {
+        canShoot = false;
+        
+        // Disable weapon sway
+        if (weaponSway != null)
+        {
+            weaponSway.DisableSway();
+        }
+
+        // Hide UI elements
+        if (crosshairGroup != null)
+        {
+            targetCrosshairAlpha = 0f;
+        }
+        if (progressBarGroup != null)
+        {
+            targetProgressBarAlpha = 0f;
+        }
+
+        // If currently reloading, cancel it
+        if (isReloading)
+        {
+            isReloading = false;
+            if (weaponModel != null)
+            {
+                weaponModel.localRotation = startRotation;
+            }
+        }
+
+        // Clean up any active particles
+        foreach (GameObject particle in activeParticles)
+        {
+            if (particle != null)
+            {
+                Destroy(particle);
+            }
+        }
+        activeParticles.Clear();
+    }
+
+    /// <summary>
+    /// Enables all weapon functionality including shooting and reloading
+    /// </summary>
+    public void EnableWeapon()
+    {
+        canShoot = true;
+        
+        // Enable weapon sway
+        if (weaponSway != null)
+        {
+            weaponSway.EnableSway();
+        }
+
+        // Show crosshair
+        if (crosshairGroup != null)
+        {
+            targetCrosshairAlpha = 1f;
+        }
+
+        // Reset weapon model rotation if it was in the middle of reloading
+        if (weaponModel != null)
+        {
+            weaponModel.localRotation = startRotation;
+        }
+    }
 }

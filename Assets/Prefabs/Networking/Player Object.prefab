@@ -321,7 +321,6 @@ MonoBehaviour:
   gunDrag: 0.2
   currentGunDragMultiplier: 0.05
   swaySpeed: 2.2
-  returnToDefaultSpeed: 999
 --- !u!1 &1222352097626409637
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,6 +428,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3606942784642303658}
   - component: {fileID: 7120279809260950965}
+  - component: {fileID: 1051144829198956869}
   m_Layer: 6
   m_Name: Weapon Holder
   m_TagString: Untagged
@@ -467,6 +467,18 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+--- !u!114 &1051144829198956869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2515740392013721165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48c18be361f9f084285307c5ef450cf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2727856979786529979
 GameObject:
   m_ObjectHideFlags: 0
@@ -2367,7 +2379,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthManager: {fileID: 5407245277775477767}
   playerMovement: {fileID: 3457258762499132557}
-  weapon: {fileID: 6959253226030392936}
+  weaponHolder: {fileID: 1051144829198956869}
   deathTime: 5
 --- !u!1 &8082853545063453160
 GameObject:

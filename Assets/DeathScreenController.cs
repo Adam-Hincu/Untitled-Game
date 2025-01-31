@@ -5,7 +5,7 @@ public class DeathScreenController : MonoBehaviour
     [Header("References")]
     [SerializeField] private HealthManager healthManager;
     [SerializeField] private PlayerMovement playerMovement;
-    [SerializeField] private Weapon weapon;
+    [SerializeField] private WeaponHolder weaponHolder;
 
     [Header("Death Settings")]
     [SerializeField] private float deathTime = 5f;
@@ -48,14 +48,14 @@ public class DeathScreenController : MonoBehaviour
             Debug.LogError("PlayerMovement reference is missing in DeathScreenController!");
         }
 
-        // Disable weapon when dead
-        if (weapon != null)
+        // Disable weapons when dead
+        if (weaponHolder != null)
         {
-            //weapon.DisableWeapon();
+            weaponHolder.DisableWeapons();
         }
         else
         {
-            Debug.LogError("Weapon reference is missing in DeathScreenController!");
+            Debug.LogError("WeaponHolder reference is missing in DeathScreenController!");
         }
     }
 
@@ -73,10 +73,10 @@ public class DeathScreenController : MonoBehaviour
                 playerMovement.EnableAllControls();
             }
 
-            // Re-enable weapon when revived
-            if (weapon != null)
+            // Re-enable weapons when revived
+            if (weaponHolder != null)
             {
-                //weapon.EnableWeapon();
+                weaponHolder.EnableWeapons();
             }
         }
         else
