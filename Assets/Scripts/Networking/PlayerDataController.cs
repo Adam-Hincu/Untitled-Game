@@ -126,19 +126,19 @@ public class PlayerDataController : NetworkBehaviour
     [Command]
     public void CmdUpdateHealth(float newHealth)
     {
+        // Update the health on the server
         currentHealth = newHealth;
-        // Immediately notify all clients of the health change
+        // Then tell all clients (including the sender) about the change
         RpcUpdateHealth(newHealth);
     }
 
     [ClientRpc]
-    private void RpcUpdateHealth(float newHealth)
+    public void RpcUpdateHealth(float newHealth)
     {
-        // Update the health value immediately on all clients
+        // Update the SyncVar
         currentHealth = newHealth;
-        
-        // If this is not the local player and we have a health manager, update it
-        if (!isLocalPlayer && healthManager != null)
+        // Update the health manager if we have one
+        if (healthManager != null)
         {
             healthManager.SetHealthFromSync(newHealth);
         }

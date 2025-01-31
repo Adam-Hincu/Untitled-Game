@@ -81,9 +81,17 @@ public class HealthManager : MonoBehaviour
         
         timeSinceLastDamage = 0f;
         
+        // Sync initial health
         if (playerDataController != null)
         {
-            playerDataController.CmdUpdateHealth(currentHealth);
+            if (playerDataController.isServer)
+            {
+                playerDataController.RpcUpdateHealth(currentHealth);
+            }
+            else
+            {
+                playerDataController.CmdUpdateHealth(currentHealth);
+            }
         }
     }
 
@@ -156,16 +164,28 @@ public class HealthManager : MonoBehaviour
             KillPlayer();
         }
         
-        // Update the inspector value immediately
+        // Update the network state
         if (playerDataController != null)
         {
-            playerDataController.CmdUpdateHealth(currentHealth);
+            if (playerDataController.isServer)
+            {
+                // If we're the server, directly use RPC
+                playerDataController.RpcUpdateHealth(currentHealth);
+            }
+            else
+            {
+                // If we're a client, send command to server
+                playerDataController.CmdUpdateHealth(currentHealth);
+            }
         }
         
-        // Visual updates
-        UpdateHealthUI();
-        FlashHealthBarColor(damageColor);
-        PunchScale();
+        // Visual updates - only if we have UI components
+        if (healthFillImage != null)
+        {
+            UpdateHealthUI();
+            FlashHealthBarColor(damageColor);
+            PunchScale();
+        }
         
         // Reset regeneration timer when taking damage
         timeSinceLastDamage = 0f;
@@ -181,15 +201,27 @@ public class HealthManager : MonoBehaviour
         float previousHealth = currentHealth;
         currentHealth = Mathf.Min(maxHealth, currentHealth + healAmount);
         
-        // Update the inspector value immediately
+        // Update the network state
         if (playerDataController != null)
         {
-            playerDataController.CmdUpdateHealth(currentHealth);
+            if (playerDataController.isServer)
+            {
+                // If we're the server, directly use RPC
+                playerDataController.RpcUpdateHealth(currentHealth);
+            }
+            else
+            {
+                // If we're a client, send command to server
+                playerDataController.CmdUpdateHealth(currentHealth);
+            }
         }
         
-        // Visual updates
-        UpdateHealthUI();
-        FlashHealthBarColor(healColor);
+        // Visual updates - only if we have UI components
+        if (healthFillImage != null)
+        {
+            UpdateHealthUI();
+            FlashHealthBarColor(healColor);
+        }
     }
 
     public void SetHealthFromSync(float newHealth)
@@ -197,41 +229,41 @@ public class HealthManager : MonoBehaviour
         float previousHealth = currentHealth;
         currentHealth = newHealth;
         
-        // Update the inspector value immediately
-        if (playerDataController != null)
+        // Visual updates - only if we have UI components
+        if (healthFillImage != null)
         {
-            playerDataController.CmdUpdateHealth(currentHealth);
-        }
-        
-        // Visual updates
-        UpdateHealthUI();
-        
-        if (currentHealth > previousHealth)
-        {
-            FlashHealthBarColor(healColor);
-        }
-        else if (currentHealth < previousHealth)
-        {
-            FlashHealthBarColor(damageColor);
-            PunchScale();
+            UpdateHealthUI();
+            
+            if (currentHealth > previousHealth)
+            {
+                FlashHealthBarColor(healColor);
+            }
+            else if (currentHealth < previousHealth)
+            {
+                FlashHealthBarColor(damageColor);
+                PunchScale();
+            }
         }
     }
 
     private void FlashHealthBarColor(Color flashColor)
     {
+        // Only proceed if we have the required UI components
+        if (healthFillImage == null) return;
+        
         if (colorAnimationCoroutine != null)
         {
             StopCoroutine(colorAnimationCoroutine);
         }
         
-        // Only animate the text color if we're not in low health state
-        if (!isInLowHealthState)
+        // Only animate the text color if we're not in low health state and have a health text component
+        if (!isInLowHealthState && healthText != null)
         {
             colorAnimationCoroutine = StartCoroutine(AnimateHealthBarColor(flashColor));
         }
         else
         {
-            // If in low health state, only animate the health bar
+            // If in low health state or no text component, only animate the health bar
             colorAnimationCoroutine = StartCoroutine(AnimateOnlyHealthBar(flashColor));
         }
     }
