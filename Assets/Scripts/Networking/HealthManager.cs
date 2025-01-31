@@ -80,18 +80,34 @@ public class HealthManager : MonoBehaviour
         UpdateHealthUI();
         
         timeSinceLastDamage = 0f;
+
+        // Wait a frame to ensure PlayerDataController is properly initialized
+        StartCoroutine(InitialHealthSync());
+    }
+
+    private IEnumerator InitialHealthSync()
+    {
+        // Wait for next frame to ensure all components are initialized
+        yield return new WaitForEndOfFrame();
         
-        // Sync initial health
+        // Make sure we have the PlayerDataController reference
+        if (playerDataController == null)
+        {
+            playerDataController = GetComponent<PlayerDataController>();
+        }
+        
+        // Sync initial health to PlayerDataController
         if (playerDataController != null)
         {
-            if (playerDataController.isServer)
-            {
-                playerDataController.RpcUpdateHealth(currentHealth);
-            }
-            else
-            {
-                playerDataController.CmdUpdateHealth(currentHealth);
-            }
+            SyncHealthToNetwork(maxHealth);
+        }
+    }
+
+    private void SyncHealthToNetwork(float health)
+    {
+        if (playerDataController != null)
+        {
+            playerDataController.CmdUpdateHealth(health);
         }
     }
 
@@ -129,8 +145,11 @@ public class HealthManager : MonoBehaviour
 
     public void KillPlayer()
     {
-        // Set health to 0 with animation
-        SetHealthFromSync(0f);
+        currentHealth = 0f;
+        // Sync to network immediately
+        SyncHealthToNetwork(currentHealth);
+        // Update visuals
+        SetHealthFromSync(currentHealth);
         
         // Call the death screen controller's Kill function
         if (deathScreenController != null)
@@ -145,8 +164,11 @@ public class HealthManager : MonoBehaviour
 
     public void Revive()
     {
-        // Set health back to max with animation
-        SetHealthFromSync(maxHealth);
+        currentHealth = maxHealth;
+        // Sync to network immediately
+        SyncHealthToNetwork(currentHealth);
+        // Update visuals
+        SetHealthFromSync(currentHealth);
     }
 
     public void TakeDamage(float damageAmount)
@@ -158,25 +180,13 @@ public class HealthManager : MonoBehaviour
         float previousHealth = currentHealth;
         currentHealth = Mathf.Max(0f, currentHealth - damageAmount);
         
+        // Sync to network immediately
+        SyncHealthToNetwork(currentHealth);
+        
         // Check if player died
         if (currentHealth <= 0f)
         {
             KillPlayer();
-        }
-        
-        // Update the network state
-        if (playerDataController != null)
-        {
-            if (playerDataController.isServer)
-            {
-                // If we're the server, directly use RPC
-                playerDataController.RpcUpdateHealth(currentHealth);
-            }
-            else
-            {
-                // If we're a client, send command to server
-                playerDataController.CmdUpdateHealth(currentHealth);
-            }
         }
         
         // Visual updates - only if we have UI components
@@ -201,20 +211,8 @@ public class HealthManager : MonoBehaviour
         float previousHealth = currentHealth;
         currentHealth = Mathf.Min(maxHealth, currentHealth + healAmount);
         
-        // Update the network state
-        if (playerDataController != null)
-        {
-            if (playerDataController.isServer)
-            {
-                // If we're the server, directly use RPC
-                playerDataController.RpcUpdateHealth(currentHealth);
-            }
-            else
-            {
-                // If we're a client, send command to server
-                playerDataController.CmdUpdateHealth(currentHealth);
-            }
-        }
+        // Sync to network immediately
+        SyncHealthToNetwork(currentHealth);
         
         // Visual updates - only if we have UI components
         if (healthFillImage != null)

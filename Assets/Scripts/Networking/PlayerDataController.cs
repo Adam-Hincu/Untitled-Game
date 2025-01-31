@@ -126,22 +126,8 @@ public class PlayerDataController : NetworkBehaviour
     [Command]
     public void CmdUpdateHealth(float newHealth)
     {
-        // Update the health on the server
         currentHealth = newHealth;
-        // Then tell all clients (including the sender) about the change
-        RpcUpdateHealth(newHealth);
-    }
-
-    [ClientRpc]
-    public void RpcUpdateHealth(float newHealth)
-    {
-        // Update the SyncVar
-        currentHealth = newHealth;
-        // Update the health manager if we have one
-        if (healthManager != null)
-        {
-            healthManager.SetHealthFromSync(newHealth);
-        }
+        // No need to RPC here as the SyncVar will automatically sync to all clients
     }
 
     private void UpdateAvatarFromSteamId()
