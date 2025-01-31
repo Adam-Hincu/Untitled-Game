@@ -13,7 +13,6 @@ public class HealthManager : MonoBehaviour
     [SerializeField] private float timeToStartRegen = 5f;
     [SerializeField] private float regenAmountPerSecond = 15f;
     private float timeSinceLastDamage;
-    private bool isRegenerating;
     private float regenTickTimer;
     
     [Header("UI References")]
@@ -81,7 +80,6 @@ public class HealthManager : MonoBehaviour
         UpdateHealthUI();
         
         timeSinceLastDamage = 0f;
-        isRegenerating = false;
         
         if (playerDataController != null)
         {

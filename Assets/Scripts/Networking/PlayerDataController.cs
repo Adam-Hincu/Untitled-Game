@@ -42,7 +42,7 @@ public class PlayerDataController : NetworkBehaviour
         otherPlayers.Clear();
 
         // Find all PlayerDataControllers in the scene
-        var allPlayers = FindObjectsOfType<PlayerDataController>();
+        var allPlayers = FindObjectsByType<PlayerDataController>(FindObjectsSortMode.None);
         
         foreach (var player in allPlayers)
         {

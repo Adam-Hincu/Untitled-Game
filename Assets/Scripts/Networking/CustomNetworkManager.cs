@@ -10,7 +10,7 @@ public class CustomNetworkManager : NetworkManager
 	[SerializeField] private PlayerObjectController GamePlayerPrefab;
 	public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
 
-	private void Awake()
+	public override void Awake()
 	{
 		if (transport == null)
 		{

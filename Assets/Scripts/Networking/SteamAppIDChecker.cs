@@ -12,7 +12,7 @@ public class SteamAppIDChecker : MonoBehaviour
         string filePath = Path.Combine(rootPath, "steam_appid.txt");
 
         // Try to get the Steam App ID from any existing SteamAppIDChecker component
-        var checker = GameObject.FindObjectOfType<SteamAppIDChecker>();
+        var checker = FindAnyObjectByType<SteamAppIDChecker>();
         uint appId = checker != null ? checker.steamAppID : 480;
 
         if (!File.Exists(filePath))
