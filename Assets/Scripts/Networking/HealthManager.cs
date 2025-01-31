@@ -107,7 +107,17 @@ public class HealthManager : MonoBehaviour
     {
         if (playerDataController != null)
         {
-            playerDataController.CmdUpdateHealth(health);
+            // Only sync if we're on the server
+            if (playerDataController.isServer)
+            {
+                playerDataController.ServerUpdateHealth(health);
+            }
+            else
+            {
+                // If we're not on the server, we shouldn't try to sync
+                // The server will handle health changes through WeaponNetworker
+                Debug.LogWarning("Attempted to sync health from client. Health changes should be handled by the server.");
+            }
         }
     }
 
