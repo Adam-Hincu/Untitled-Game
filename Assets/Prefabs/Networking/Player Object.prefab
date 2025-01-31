@@ -467,6 +467,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  localPlayerHealth: {fileID: 5407245277775477767}
 --- !u!114 &1051144829198956869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1949,6 +1950,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   deathScreenController: {fileID: 7785125502677728011}
+  playerName: Player
 --- !u!1 &6321068011767939014
 GameObject:
   m_ObjectHideFlags: 0
