@@ -135,6 +135,10 @@ public class HealthManager : MonoBehaviour
         {
             Heal(15f);
         }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            EnvironmentKill();
+        }
 
         // Handle regeneration
         if (currentHealth < maxHealth)
@@ -168,6 +172,26 @@ public class HealthManager : MonoBehaviour
         if (deathScreenController != null)
         {
             deathScreenController.Kill(lastShooterId);
+        }
+        else
+        {
+            Debug.LogError("DeathScreenController reference is missing in HealthManager!");
+        }
+    }
+
+    public void EnvironmentKill()
+    {
+        currentHealth = 0f;
+        
+        // Sync to network immediately
+        SyncHealthToNetwork(currentHealth);
+        // Update visuals
+        SetHealthFromSync(currentHealth);
+        
+        // Call the death screen controller's Kill function with no killer ID
+        if (deathScreenController != null)
+        {
+            deathScreenController.Kill(0);
         }
         else
         {

@@ -33,7 +33,12 @@ public class DeathScreenController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        // Initialize death screen to be invisible and disabled at start
+        if (deathScreenCanvasGroup != null)
+        {
+            deathScreenCanvasGroup.alpha = 0;
+            deathScreenCanvasGroup.gameObject.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -43,6 +48,11 @@ public class DeathScreenController : MonoBehaviour
         {
             if (isFadingIn)
             {
+                if (!deathScreenCanvasGroup.gameObject.activeSelf)
+                {
+                    deathScreenCanvasGroup.gameObject.SetActive(true);
+                }
+                
                 currentFadeTimer += Time.deltaTime;
                 float progress = currentFadeTimer / fadeInDuration;
                 
@@ -70,6 +80,7 @@ public class DeathScreenController : MonoBehaviour
                     deathScreenCanvasGroup.alpha = 0;
                     gameUICanvasGroup.alpha = 1;
                     isDead = false;
+                    deathScreenCanvasGroup.gameObject.SetActive(false);
                 }
             }
             else
@@ -122,6 +133,15 @@ public class DeathScreenController : MonoBehaviour
                         killerProfileImage.texture = killerAvatar.texture;
                     }
                 }
+            }
+        }
+        else
+        {
+            // Handle environment kill - no killer profile
+            killerNameText.text = "Environment";
+            if (killerProfileImage != null)
+            {
+                killerProfileImage.gameObject.SetActive(false);
             }
         }
 
